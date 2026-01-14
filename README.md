@@ -4,14 +4,14 @@ Grafana dashboards for monitoring OpenCloud with the PLG stack (Prometheus + Lok
 
 ## Dashboards
 
-| Dashboard | UID | Description |
-|-----------|-----|-------------|
-| **OpenCloud Logs** | `opencloud-logs` | Service/Component/Level filter, error tracking |
-| **OpenCloud Proxy** | `opencloud-proxy` | HTTP access logs, request analysis |
-| OpenCloud Overview | `opencloud-overview` | Quick health check: requests, errors, latency |
-| OpenCloud Uploads | `opencloud-uploads` | File uploads, antivirus scanning, processing |
-| OpenCloud Requests | `opencloud-requests` | Performance analysis, latency heatmap |
-| Activitylog Debug | `activitylog-debug` | Event debugging |
+| Dashboard | UID | Description | Docs |
+|-----------|-----|-------------|------|
+| **OpenCloud Logs** | `opencloud-logs` | Service/Component/Level filter, error tracking | [📖](grafana/provisioning/dashboards/opencloud-logs.md) |
+| **OpenCloud Proxy** | `opencloud-proxy` | HTTP access logs, request analysis | [📖](grafana/provisioning/dashboards/opencloud-proxy.md) |
+| OpenCloud Overview | `opencloud-overview` | Quick health check: requests, errors, latency | [📖](grafana/provisioning/dashboards/opencloud-overview.md) |
+| OpenCloud Uploads | `opencloud-uploads` | File uploads, antivirus scanning, processing | [📖](grafana/provisioning/dashboards/opencloud-uploads.md) |
+| OpenCloud Requests | `opencloud-requests` | Performance analysis, latency heatmap | [📖](grafana/provisioning/dashboards/opencloud-requests.md) |
+| Activitylog Debug | `activitylog-debug` | Event debugging | [📖](grafana/provisioning/dashboards/activitylog.md) |
 
 ## Structure
 
