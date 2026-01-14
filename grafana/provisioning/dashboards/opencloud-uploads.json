@@ -1,0 +1,737 @@
+{
+  "uid": "opencloud-uploads",
+  "title": "OpenCloud Upload Pipeline",
+  "description": "Deep dive into file uploads, antivirus scanning with ClamAV, and async processing queues. Use this dashboard to troubleshoot upload failures and identify bottlenecks.",
+  "tags": ["opencloud", "uploads", "antivirus"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "30s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Active Uploads",
+      "description": "Currently active file uploads. Shows how many files are being uploaded right now. High values during off-hours may indicate backup jobs or sync clients. Yellow >10, Red >50.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 10 },
+              { "color": "red", "value": 50 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(reva_upload_active)",
+          "legendFormat": "Active"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Processing",
+      "description": "Files in post-upload processing (antivirus scan, thumbnail generation, search indexing). High values indicate ClamAV is slow or backlog is building. Should return to 0 shortly after uploads complete.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null },
+              { "color": "yellow", "value": 20 },
+              { "color": "red", "value": 100 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(reva_upload_processing)",
+          "legendFormat": "Processing"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Active Downloads",
+      "description": "Currently active file downloads. High values indicate heavy read activity. Downloads are less resource-intensive than uploads since no post-processing is needed.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "purple", "value": null },
+              { "color": "yellow", "value": 50 },
+              { "color": "red", "value": 200 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(reva_download_active)",
+          "legendFormat": "Downloads"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Upload Success Rate",
+      "description": "Percentage of uploads that complete successfully (finalized / initiated). Green >98% is healthy. Yellow 90-98% needs attention. Red <90% indicates serious issues - check antivirus logs or storage.",
+      "type": "gauge",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 90 },
+              { "color": "green", "value": 98 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "expr": "(sum(increase(reva_upload_sessions_finalized[5m])) / sum(increase(reva_upload_sessions_initiated[5m]))) * 100",
+          "legendFormat": "Success %"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Postprocessing Queue",
+      "description": "Events waiting to be processed after upload (antivirus, thumbnails). Should normally be 0-5. Growing queue indicates processing can't keep up - check ClamAV performance or disk I/O.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 10 },
+              { "color": "red", "value": 50 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(opencloud_postprocessing_events_unprocessed)",
+          "legendFormat": "Unprocessed"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Search Queue",
+      "description": "Events waiting to update the search index. New files need to be indexed for search. Growing queue may indicate search service issues. Check search logs if persistently high.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 10 },
+              { "color": "red", "value": 50 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(opencloud_search_events_unprocessed)",
+          "legendFormat": "Unprocessed"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Upload Pipeline Flow",
+      "description": "Upload session lifecycle per minute: Initiated (upload started) → Transfer Complete (all bytes received) → Scanned (ClamAV check) → Finalized (success) or Aborted (failed). Watch for gaps between stages - indicates where uploads get stuck.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 20,
+            "pointSize": 5,
+            "showPoints": "never"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Initiated" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Transfer Complete" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "light-blue", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Scanned (AV)" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Finalized" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Aborted" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Restarted" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Postprocessing Done" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "semi-dark-green", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(reva_upload_sessions_initiated[5m])) * 60",
+          "legendFormat": "Initiated"
+        },
+        {
+          "expr": "sum(rate(reva_upload_sessions_bytes_received[5m])) * 60",
+          "legendFormat": "Transfer Complete"
+        },
+        {
+          "expr": "sum(rate(reva_upload_sessions_scanned[5m])) * 60",
+          "legendFormat": "Scanned (AV)"
+        },
+        {
+          "expr": "sum(rate(reva_upload_sessions_finalized[5m])) * 60",
+          "legendFormat": "Finalized"
+        },
+        {
+          "expr": "sum(rate(reva_upload_sessions_aborted[5m])) * 60",
+          "legendFormat": "Aborted"
+        },
+        {
+          "expr": "sum(rate(reva_upload_sessions_restarted[5m])) * 60",
+          "legendFormat": "Restarted"
+        },
+        {
+          "expr": "sum(rate(opencloud_postprocessing_finished[5m])) * 60",
+          "legendFormat": "Postprocessing Done"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Uploads in Selected Range",
+      "description": "Upload counts for the time range selected above (e.g., 'Last 1 hour'). Shows activity in your selected window. Compare stages to identify where uploads fail: Initiated → Transfer Complete → Scanned → Finalized.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 12, "x": 0, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Finalized" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Aborted" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(reva_upload_sessions_initiated[$__range]))",
+          "legendFormat": "Initiated"
+        },
+        {
+          "expr": "sum(increase(reva_upload_sessions_bytes_received[$__range]))",
+          "legendFormat": "Transfer Complete"
+        },
+        {
+          "expr": "sum(increase(reva_upload_sessions_scanned[$__range]))",
+          "legendFormat": "Scanned"
+        },
+        {
+          "expr": "sum(increase(reva_upload_sessions_finalized[$__range]))",
+          "legendFormat": "Finalized"
+        },
+        {
+          "expr": "sum(increase(reva_upload_sessions_aborted[$__range]))",
+          "legendFormat": "Aborted"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Upload Totals (since start)",
+      "description": "Cumulative upload counts since container restart. Shows overall system health over entire uptime. Useful for success rate calculation: Finalized/Initiated. If Transfer Complete < Initiated: network issues. If Scanned < Finalized: AV bypass.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 12, "x": 12, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Finalized" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Aborted" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "expr": "sum(reva_upload_sessions_initiated)",
+          "legendFormat": "Initiated"
+        },
+        {
+          "expr": "sum(reva_upload_sessions_bytes_received)",
+          "legendFormat": "Transfer Complete"
+        },
+        {
+          "expr": "sum(reva_upload_sessions_scanned)",
+          "legendFormat": "Scanned"
+        },
+        {
+          "expr": "sum(reva_upload_sessions_finalized)",
+          "legendFormat": "Finalized"
+        },
+        {
+          "expr": "sum(reva_upload_sessions_aborted)",
+          "legendFormat": "Aborted"
+        },
+        {
+          "expr": "sum(reva_upload_sessions_deleted)",
+          "legendFormat": "Deleted"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Active Transfers Over Time",
+      "description": "Concurrent transfers stacked over time. Uploads (blue), Downloads (purple), Processing (orange), Assimilation (green = PosixFS metadata sync). Helps identify peak usage times and correlate with performance issues.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 30,
+            "pointSize": 5,
+            "showPoints": "never",
+            "stacking": { "mode": "normal" }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Uploads" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Downloads" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Processing" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Assimilation" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "light-green", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "sum(reva_upload_active)",
+          "legendFormat": "Uploads"
+        },
+        {
+          "expr": "sum(reva_download_active)",
+          "legendFormat": "Downloads"
+        },
+        {
+          "expr": "sum(reva_upload_processing)",
+          "legendFormat": "Processing"
+        },
+        {
+          "expr": "sum(reva_assimilation_active_tasks)",
+          "legendFormat": "Assimilation"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Event Queue Depth",
+      "description": "Async event queue backlog over time. Unprocessed = waiting to be handled. Redelivered = events that failed and are being retried. Rising redelivered count indicates persistent failures - check service logs.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 20,
+            "pointSize": 5,
+            "showPoints": "never"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Postprocessing Unprocessed" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Postprocessing Redelivered" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Search Unprocessed" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Search Redelivered" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Postprocessing Outstanding Acks" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "sum(opencloud_postprocessing_events_unprocessed)",
+          "legendFormat": "Postprocessing Unprocessed"
+        },
+        {
+          "expr": "sum(opencloud_postprocessing_events_redelivered)",
+          "legendFormat": "Postprocessing Redelivered"
+        },
+        {
+          "expr": "sum(opencloud_postprocessing_events_outstanding_acks)",
+          "legendFormat": "Postprocessing Outstanding Acks"
+        },
+        {
+          "expr": "sum(opencloud_search_events_unprocessed)",
+          "legendFormat": "Search Unprocessed"
+        },
+        {
+          "expr": "sum(opencloud_search_events_redelivered)",
+          "legendFormat": "Search Redelivered"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Thumbnail Generation",
+      "description": "Time to generate image/document thumbnails. P50 (green) = typical. P95 (yellow) = slow. P99 (red) = worst case. Slow thumbnails affect file browser responsiveness. Large files or complex documents take longer.",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 24 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "pointSize": 5,
+            "showPoints": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "P50" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "P95" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "P99" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(opencloud_thumbnails_getthumbnail_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P50"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(opencloud_thumbnails_getthumbnail_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P95"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(opencloud_thumbnails_getthumbnail_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P99"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Postprocessing Duration",
+      "description": "Time to complete async postprocessing (antivirus, thumbnails, search indexing). P50 = typical. P95 = slow. P99 = worst case. High values indicate processing bottlenecks.",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 24 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "pointSize": 5,
+            "showPoints": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "P50" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "P95" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "P99" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(opencloud_postprocessing_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P50"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(opencloud_postprocessing_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P95"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(opencloud_postprocessing_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P99"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Drop-off Analysis (selected range)",
+      "description": "Upload success rates for selected time range. Shows % of uploads completing each stage. All bars should be near 100%. Low 'Transfer Complete' = network issues. Low 'AV Scanned' = ClamAV rejections. Low 'Finalized' = post-processing failures.",
+      "type": "bargauge",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 24 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 80 },
+              { "color": "green", "value": 95 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "expr": "(sum(increase(reva_upload_sessions_bytes_received[$__range])) / sum(increase(reva_upload_sessions_initiated[$__range]))) * 100",
+          "legendFormat": "Transfer Complete"
+        },
+        {
+          "expr": "(sum(increase(reva_upload_sessions_scanned[$__range])) / sum(increase(reva_upload_sessions_initiated[$__range]))) * 100",
+          "legendFormat": "AV Scanned"
+        },
+        {
+          "expr": "(sum(increase(reva_upload_sessions_finalized[$__range])) / sum(increase(reva_upload_sessions_initiated[$__range]))) * 100",
+          "legendFormat": "Finalized"
+        }
+      ]
+    }
+  ]
+}

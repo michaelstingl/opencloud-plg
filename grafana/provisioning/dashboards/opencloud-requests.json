@@ -1,0 +1,646 @@
+{
+  "uid": "opencloud-requests",
+  "title": "OpenCloud Request Details",
+  "description": "Performance analysis dashboard. Use this to investigate latency issues, identify slow services, and correlate load with resource usage. Start here when users report slowness.",
+  "tags": ["opencloud", "requests", "performance"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "30s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Requests/s",
+      "description": "Total HTTP requests per second across all services. Baseline for understanding current load. Compare with historical values to identify traffic patterns or anomalies.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(opencloud_proxy_requests_total[5m]))",
+          "legendFormat": "Total"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Error Rate",
+      "description": "Percentage of failed requests. Should be <1% under normal conditions. Spikes here warrant immediate investigation in Loki logs.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 1 },
+              { "color": "red", "value": 5 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(opencloud_proxy_errors_total[5m])) / sum(rate(opencloud_proxy_requests_total[5m])) * 100",
+          "legendFormat": "Error %"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "P50 Latency",
+      "description": "Median response time - what the typical user experiences. Should be <100ms for snappy UI. Higher values indicate general slowness affecting everyone.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.1 },
+              { "color": "red", "value": 0.5 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(opencloud_proxy_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P50"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "P95 Latency",
+      "description": "95th percentile - slow requests affecting 5% of users. Gap between P50 and P95 shows consistency. Large gap = some requests are much slower than others.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.5 },
+              { "color": "red", "value": 2 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(opencloud_proxy_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P95"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "P99 Latency",
+      "description": "99th percentile - worst case for almost all users. Very high P99 with normal P50 indicates occasional slow operations (large file ops, complex searches, or resource contention).",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 1 },
+              { "color": "red", "value": 5 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(opencloud_proxy_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P99"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Errors/s",
+      "description": "Absolute error count per second. More useful than % when traffic is low. Even 1 error/s during low traffic periods could be 50% error rate.",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 1 },
+              { "color": "red", "value": 10 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(opencloud_proxy_errors_total[5m]))",
+          "legendFormat": "Errors"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Latency Heatmap",
+      "description": "Latency distribution visualization. Darker colors = more requests at that latency. Look for: consistent band (good), spreading pattern (degradation), bimodal distribution (two different request types). Hover for exact counts.",
+      "type": "heatmap",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "calculate": false,
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Oranges",
+          "steps": 64
+        },
+        "exemplars": { "color": "rgba(255,0,255,0.7)" },
+        "filterValues": { "le": 1e-9 },
+        "legend": { "show": true },
+        "rowsFrame": { "layout": "auto" },
+        "tooltip": { "show": true, "yHistogram": true },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false,
+          "unit": "s"
+        }
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(opencloud_proxy_duration_seconds_bucket[1m])) by (le)",
+          "format": "heatmap",
+          "legendFormat": "{{le}}"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Latency Percentiles Over Time",
+      "description": "Track how latency changes over time. Parallel lines = consistent performance. Diverging lines = some requests getting slower. Sudden jumps correlate with deployments, traffic spikes, or external issues.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "pointSize": 5,
+            "showPoints": "never"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "P50" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "P90" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "P95" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "P99" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(opencloud_proxy_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P50"
+        },
+        {
+          "expr": "histogram_quantile(0.90, sum(rate(opencloud_proxy_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P90"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(opencloud_proxy_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P95"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(opencloud_proxy_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P99"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Request Rate vs Errors",
+      "description": "Does load cause errors? If errors spike when requests spike, system is overwhelmed. If errors spike without request spike, something else is wrong (disk full, external service down, bug).",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "pointSize": 5,
+            "showPoints": "never"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Requests/s" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } },
+              { "id": "unit", "value": "reqps" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Errors/s" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } },
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "short" }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(opencloud_proxy_requests_total[5m]))",
+          "legendFormat": "Requests/s"
+        },
+        {
+          "expr": "sum(rate(opencloud_proxy_errors_total[5m]))",
+          "legendFormat": "Errors/s"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "HTTP Requests by Service",
+      "description": "External-facing HTTP services. Frontend = web UI/API. WebDAV = file sync clients (desktop/mobile apps). OCM = Open Cloud Mesh federation. Helps identify which interface is under load.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 20,
+            "pointSize": 5,
+            "showPoints": "never",
+            "stacking": { "mode": "normal" }
+          }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(opencloud_frontend_http_requests_total[5m]))",
+          "legendFormat": "Frontend"
+        },
+        {
+          "expr": "sum(rate(ocis_ocdav_http_requests_total[5m]))",
+          "legendFormat": "WebDAV"
+        },
+        {
+          "expr": "sum(rate(opencloud_ocm_http_requests_total[5m]))",
+          "legendFormat": "OCM"
+        },
+        {
+          "expr": "sum(rate(opencloud_storage_system_http_requests_total[5m]))",
+          "legendFormat": "Storage System"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "gRPC Requests by Service",
+      "description": "Internal microservice communication. Gateway = central router. Users/Groups = identity lookups. Sharing = share operations. High traffic on one service may indicate bottleneck or inefficient queries.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 20,
+            "pointSize": 5,
+            "showPoints": "never",
+            "stacking": { "mode": "normal" }
+          }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(opencloud_gateway_grpc_requests_total[5m]))",
+          "legendFormat": "Gateway"
+        },
+        {
+          "expr": "sum(rate(opencloud_users_grpc_requests_total[5m]))",
+          "legendFormat": "Users"
+        },
+        {
+          "expr": "sum(rate(opencloud_groups_grpc_requests_total[5m]))",
+          "legendFormat": "Groups"
+        },
+        {
+          "expr": "sum(rate(opencloud_sharing_grpc_requests_total[5m]))",
+          "legendFormat": "Sharing"
+        },
+        {
+          "expr": "sum(rate(opencloud_storage_users_grpc_requests_total[5m]))",
+          "legendFormat": "Storage Users"
+        },
+        {
+          "expr": "sum(rate(opencloud_auth_service_grpc_requests_total[5m]))",
+          "legendFormat": "Auth Service"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Microservice Latency by Endpoint",
+      "description": "Average latency per internal API endpoint. Shows top 10 slowest. Useful for identifying which specific operations are slow. RoleService, PermissionService calls happen on every request - keep them fast.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "pointSize": 5,
+            "showPoints": "auto"
+          }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "table", "placement": "right" }
+      },
+      "targets": [
+        {
+          "expr": "topk(10, sum by (micro_endpoint) (rate(micro_request_duration_seconds_sum[5m])) / sum by (micro_endpoint) (rate(micro_request_duration_seconds_count[5m])))",
+          "legendFormat": "{{micro_endpoint}}"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Request Rate vs Memory",
+      "description": "Correlation analysis for memory leaks. Memory should stay relatively stable regardless of load. If heap grows with requests and doesn't drop back after load decreases, investigate memory leak. Goroutines should also stay bounded.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 28 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "pointSize": 5,
+            "showPoints": "never"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Requests/s" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } },
+              { "id": "unit", "value": "reqps" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Heap Memory" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } },
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "bytes" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Goroutines" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } },
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "short" }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(opencloud_proxy_requests_total[5m]))",
+          "legendFormat": "Requests/s"
+        },
+        {
+          "expr": "sum(go_memstats_heap_alloc_bytes{job=\"opencloud\"})",
+          "legendFormat": "Heap Memory"
+        },
+        {
+          "expr": "sum(go_goroutines{job=\"opencloud\"})",
+          "legendFormat": "Goroutines"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Service Requests (selected range)",
+      "description": "Request counts for the selected time range. Shows which services were most active in your selected window. Useful for investigating specific time periods.",
+      "type": "bargauge",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 36 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(opencloud_frontend_http_requests_total[$__range]))",
+          "legendFormat": "Frontend HTTP"
+        },
+        {
+          "expr": "sum(increase(ocis_ocdav_http_requests_total[$__range]))",
+          "legendFormat": "WebDAV"
+        },
+        {
+          "expr": "sum(increase(opencloud_gateway_grpc_requests_total[$__range]))",
+          "legendFormat": "Gateway gRPC"
+        },
+        {
+          "expr": "sum(increase(opencloud_storage_users_grpc_requests_total[$__range]))",
+          "legendFormat": "Storage Users gRPC"
+        },
+        {
+          "expr": "sum(increase(opencloud_sharing_grpc_requests_total[$__range]))",
+          "legendFormat": "Sharing gRPC"
+        },
+        {
+          "expr": "sum(increase(opencloud_users_grpc_requests_total[$__range]))",
+          "legendFormat": "Users gRPC"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Service Totals (since start)",
+      "description": "Cumulative request counts since container restart. Shows overall traffic distribution over entire uptime. Useful for capacity planning and understanding service load ratios.",
+      "type": "bargauge",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 36 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "expr": "sum(opencloud_frontend_http_requests_total)",
+          "legendFormat": "Frontend HTTP"
+        },
+        {
+          "expr": "sum(ocis_ocdav_http_requests_total)",
+          "legendFormat": "WebDAV"
+        },
+        {
+          "expr": "sum(opencloud_gateway_grpc_requests_total)",
+          "legendFormat": "Gateway gRPC"
+        },
+        {
+          "expr": "sum(opencloud_storage_users_grpc_requests_total)",
+          "legendFormat": "Storage Users gRPC"
+        },
+        {
+          "expr": "sum(opencloud_sharing_grpc_requests_total)",
+          "legendFormat": "Sharing gRPC"
+        },
+        {
+          "expr": "sum(opencloud_users_grpc_requests_total)",
+          "legendFormat": "Users gRPC"
+        }
+      ]
+    }
+  ]
+}
