@@ -47,7 +47,7 @@ go_goroutines
 
 ## Panels
 
-### Key Indicators (Top Row)
+### Key Indicators
 
 | Panel | Shows | Thresholds |
 |-------|-------|------------|
@@ -58,64 +58,55 @@ go_goroutines
 | **P99 Latency** | 99th percentile | green <1s, yellow <5s, red ≥5s |
 | **Errors/s** | Absolute error count | green <1, yellow <10, red ≥10 |
 
-### Latency Heatmap
+### Latency Analysis
 
-Visual distribution of response times. Darker = more requests at that latency.
+| Panel | Shows |
+|-------|-------|
+| **Latency Heatmap** | Visual distribution of response times. Darker = more requests |
+| **Latency Percentiles Over Time** | Track P50, P90, P95, P99 trends |
+| **Request Rate vs Errors** | Correlation: Do errors increase with load? |
 
 **Interpretation:**
-- Consistent band = good performance
+- Consistent band in heatmap = good performance
 - Spreading pattern = degradation
 - Bimodal (two bands) = different request types
 
-### Latency Percentiles Over Time
+### Service Breakdown *(collapsed)*
 
-Track P50, P90, P95, P99 over time.
-
-**Interpretation:**
-- Parallel lines = consistent
-- Diverging lines = some requests getting slower
-- Sudden jumps = correlate with events
-
-### Request Rate vs Errors
-
-Correlation analysis: Do errors increase with load?
+| Panel | Shows |
+|-------|-------|
+| **HTTP Requests by Service** | Frontend, WebDAV, OCM, Storage System |
+| **gRPC Requests by Service** | Gateway, Users, Groups, Sharing, Storage Users, Auth |
 
 **Interpretation:**
-- Errors spike with requests → system overwhelmed
-- Errors spike alone → other issue (disk, dependency)
+- Frontend = web UI/API
+- WebDAV = desktop/mobile sync clients
+- High traffic on one service may indicate bottleneck
 
-### HTTP Requests by Service
+### Endpoint Analysis *(collapsed)*
 
-External-facing services:
-- **Frontend** = Web UI/API
-- **WebDAV** = Desktop/mobile sync clients
-- **OCM** = Federation
-- **Storage System** = Internal storage ops
+| Panel | Shows |
+|-------|-------|
+| **Microservice Latency by Endpoint** | Top 10 slowest internal endpoints |
 
-### gRPC Requests by Service
+Focus optimization on high-volume + high-latency endpoints.
 
-Internal microservice communication:
-- **Gateway** = Central router
-- **Users/Groups** = Identity lookups
-- **Sharing** = Share operations
-- **Storage Users** = User storage
-- **Auth Service** = Authentication
+### Resource Correlation *(collapsed)*
 
-### Microservice Latency by Endpoint
-
-Top 10 slowest internal endpoints. Focus optimization here.
-
-### Request Rate vs Memory
-
-Correlation for memory leak detection.
+| Panel | Shows |
+|-------|-------|
+| **Request Rate vs Memory** | Heap memory and goroutines vs load |
 
 **Interpretation:**
 - Memory grows with load but drops after = normal
 - Memory grows and never drops = leak
 
-### Service Requests (range) / Service Totals
+### Service Totals *(collapsed)*
 
-Bar gauges showing request distribution for capacity planning.
+| Panel | Shows |
+|-------|-------|
+| **Service Requests (selected range)** | Request distribution for capacity planning |
+| **Service Totals (since start)** | Cumulative counts since container restart |
 
 ---
 
@@ -151,27 +142,29 @@ Large gap between P50 and P99 indicates outliers needing investigation.
 1. Check **P50/P95/P99 Latency** indicators
 2. Look at **Latency Heatmap** for when slowdown started
 3. Check **Latency Percentiles Over Time** for trends
-4. Identify affected service in **HTTP/gRPC Requests by Service**
+4. Expand **Service Breakdown** to identify affected service
 
 ### Find slow endpoints
 
-1. Check **Microservice Latency by Endpoint**
-2. Note top 3-5 slowest endpoints
-3. Correlate with request volume
+1. Expand **Endpoint Analysis** section
+2. Check **Microservice Latency by Endpoint**
+3. Note top 3-5 slowest endpoints
 4. Focus optimization on high-volume + high-latency
 
 ### Check for memory leaks
 
-1. Watch **Request Rate vs Memory** over hours/days
-2. Does memory drop after load decreases?
-3. Do goroutines return to baseline?
-4. If not → potential leak
+1. Expand **Resource Correlation** section
+2. Watch **Request Rate vs Memory** over hours/days
+3. Does memory drop after load decreases?
+4. Do goroutines return to baseline?
+5. If not → potential leak
 
 ### Capacity planning
 
-1. Review **Service Totals** for traffic distribution
-2. Check **HTTP/gRPC Requests by Service** for peak patterns
-3. Identify which services need scaling
+1. Expand **Service Totals** section
+2. Review traffic distribution
+3. Expand **Service Breakdown** for peak patterns
+4. Identify which services need scaling
 
 ---
 

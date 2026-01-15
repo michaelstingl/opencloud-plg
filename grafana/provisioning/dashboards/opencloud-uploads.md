@@ -43,7 +43,7 @@ opencloud_thumbnails_*
 
 ## Panels
 
-### Key Indicators (Top Row)
+### Key Indicators
 
 | Panel | Shows | Thresholds |
 |-------|-------|------------|
@@ -54,47 +54,48 @@ opencloud_thumbnails_*
 | **Postprocessing Queue** | Events waiting for processing | green <10, yellow <50, red ≥50 |
 | **Search Queue** | Events waiting for indexing | green <10, yellow <50, red ≥50 |
 
-### Upload Pipeline Flow
+### Upload Pipeline
 
-Upload lifecycle over time:
-- **Initiated** (blue) → Upload started
-- **Transfer Complete** (light-blue) → All bytes received
-- **Scanned (AV)** (yellow) → ClamAV check done
-- **Finalized** (green) → Success
-- **Aborted** (red) → Failed
+| Panel | Shows |
+|-------|-------|
+| **Upload Pipeline Flow** | Upload lifecycle over time: Initiated → Transfer Complete → Scanned → Finalized/Aborted |
 
 **Interpretation:**
 - Gap between stages = where uploads get stuck
 - Initiated >> Finalized = high failure rate
 
-### Uploads in Selected Range / Upload Totals
+### Upload Statistics
+
+| Panel | Shows |
+|-------|-------|
+| **Uploads in Selected Range** | Counts for selected time window |
+| **Upload Totals (since start)** | Cumulative counts since container restart |
 
 Compare stages to identify where uploads fail:
 - Transfer Complete < Initiated → Network issues
 - Scanned < Transfer Complete → ClamAV rejections
 - Finalized < Scanned → Post-processing failures
 
-### Active Transfers Over Time
+### Transfer Activity *(collapsed)*
 
-Stacked view: Uploads, Downloads, Processing, Assimilation (PosixFS metadata sync).
+| Panel | Shows |
+|-------|-------|
+| **Active Transfers Over Time** | Stacked view: Uploads, Downloads, Processing, Assimilation |
+| **Event Queue Depth** | Queue backlog: Unprocessed and Redelivered events |
 
-### Event Queue Depth
+**Interpretation:**
+- Rising redelivered count = persistent failures
+- High Processing values = slow ClamAV
 
-Queue backlog over time:
-- **Unprocessed** = waiting to be handled
-- **Redelivered** = failed and retrying
+### Processing Performance *(collapsed)*
 
-Rising redelivered count = persistent failures.
+| Panel | Shows |
+|-------|-------|
+| **Thumbnail Generation** | Latency percentiles (P50, P95, P99) |
+| **Postprocessing Duration** | Overall processing time percentiles |
+| **Drop-off Analysis** | Success rates per stage as bar gauges |
 
-### Thumbnail Generation / Postprocessing Duration
-
-Latency percentiles (P50, P95, P99) for:
-- Thumbnail generation
-- Overall postprocessing
-
-### Drop-off Analysis
-
-Success rates for each stage as bar gauges. All should be near 100%.
+All drop-off bars should be near 100%.
 
 ---
 
@@ -134,29 +135,32 @@ User clicks Upload
 ### Debug slow uploads
 
 1. Check **Processing** count (high = bottleneck)
-2. Check **Postprocessing Duration** for slow P95/P99
-3. Check **Event Queue Depth** for backlog
-4. → For ClamAV logs: [Logs](opencloud-logs.md) with component=antivirus
+2. Expand **Processing Performance** section
+3. Check **Postprocessing Duration** for slow P95/P99
+4. Expand **Transfer Activity** for **Event Queue Depth**
+5. → For ClamAV logs: [Logs](opencloud-logs.md) with component=antivirus
 
 ### Investigate upload failures
 
 1. Check **Upload Success Rate** gauge
 2. Compare stages in **Uploads in Selected Range**
 3. Identify gap: which stage has drop-off?
-4. Check **Drop-off Analysis** bars
+4. Expand **Processing Performance** for **Drop-off Analysis**
 5. → For error details: [Logs](opencloud-logs.md)
 
 ### Monitor ClamAV performance
 
-1. Watch gap between Transfer Complete and Scanned
+1. Watch gap between Transfer Complete and Scanned in pipeline
 2. Check **Postprocessing Queue** for growing backlog
-3. Review **Postprocessing Duration** P95
+3. Expand **Processing Performance** for duration P95
+4. → For ClamAV specific: [Logs](opencloud-logs.md) with component=antivirus
 
 ### Check for sync client issues
 
 1. Look for many **Active Uploads** during off-hours (backup jobs)
 2. Check **Aborted** count in pipeline flow
-3. → For HTTP details: [Proxy](opencloud-proxy.md)
+3. Expand **Transfer Activity** for patterns
+4. → For HTTP details: [Proxy](opencloud-proxy.md)
 
 ---
 
