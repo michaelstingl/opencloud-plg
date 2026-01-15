@@ -5,7 +5,7 @@
   "tags": ["opencloud", "requests", "performance"],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 3,
+  "version": 4,
   "refresh": "30s",
   "time": {
     "from": "now-1h",
@@ -20,7 +20,7 @@
       "collapsed": false
     },
     {
-      "id": 1,
+      "id": 110,
       "title": "Total Requests/s",
       "description": "Total HTTP requests per second across all services. Baseline for understanding current load. Compare with historical values to identify traffic patterns or anomalies.",
       "type": "stat",
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": 120,
       "title": "Error Rate",
       "description": "Percentage of failed requests. Should be <1% under normal conditions. Spikes here warrant immediate investigation in Loki logs.",
       "type": "stat",
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": 130,
       "title": "P50 Latency",
       "description": "Median response time - what the typical user experiences. Should be <100ms for snappy UI. Higher values indicate general slowness affecting everyone.",
       "type": "stat",
@@ -117,7 +117,7 @@
       ]
     },
     {
-      "id": 4,
+      "id": 140,
       "title": "P95 Latency",
       "description": "95th percentile - slow requests affecting 5% of users. Gap between P50 and P95 shows consistency. Large gap = some requests are much slower than others.",
       "type": "stat",
@@ -150,7 +150,7 @@
       ]
     },
     {
-      "id": 5,
+      "id": 150,
       "title": "P99 Latency",
       "description": "99th percentile - worst case for almost all users. Very high P99 with normal P50 indicates occasional slow operations (large file ops, complex searches, or resource contention).",
       "type": "stat",
@@ -183,7 +183,7 @@
       ]
     },
     {
-      "id": 6,
+      "id": 160,
       "title": "Errors/s",
       "description": "Absolute error count per second. More useful than % when traffic is low. Even 1 error/s during low traffic periods could be 50% error rate.",
       "type": "stat",
@@ -223,7 +223,7 @@
       "collapsed": false
     },
     {
-      "id": 7,
+      "id": 210,
       "title": "Latency Heatmap",
       "description": "Latency distribution visualization. Darker colors = more requests at that latency. Look for: consistent band (good), spreading pattern (degradation), bimodal distribution (two different request types). Hover for exact counts.",
       "type": "heatmap",
@@ -261,7 +261,7 @@
       ]
     },
     {
-      "id": 8,
+      "id": 220,
       "title": "Latency Percentiles Over Time",
       "description": "Track how latency changes over time. Parallel lines = consistent performance. Diverging lines = some requests getting slower. Sudden jumps correlate with deployments, traffic spikes, or external issues.",
       "type": "timeseries",
@@ -329,7 +329,7 @@
       ]
     },
     {
-      "id": 9,
+      "id": 230,
       "title": "Request Rate vs Errors",
       "description": "Does load cause errors? If errors spike when requests spike, system is overwhelmed. If errors spike without request spike, something else is wrong (disk full, external service down, bug).",
       "type": "timeseries",
@@ -386,7 +386,7 @@
       "collapsed": true,
       "panels": [
         {
-          "id": 10,
+          "id": 310,
           "title": "HTTP Requests by Service",
           "description": "External-facing HTTP services. Frontend = web UI/API. WebDAV = file sync clients (desktop/mobile apps). OCM = Open Cloud Mesh federation. Helps identify which interface is under load.",
           "type": "timeseries",
@@ -429,7 +429,7 @@
           ]
         },
         {
-          "id": 11,
+          "id": 320,
           "title": "gRPC Requests by Service",
           "description": "Internal microservice communication. Gateway = central router. Users/Groups = identity lookups. Sharing = share operations. High traffic on one service may indicate bottleneck or inefficient queries.",
           "type": "timeseries",
@@ -489,7 +489,7 @@
       "collapsed": true,
       "panels": [
         {
-          "id": 12,
+          "id": 410,
           "title": "Microservice Latency by Endpoint",
           "description": "Average latency per internal API endpoint. Shows top 10 slowest. Useful for identifying which specific operations are slow. RoleService, PermissionService calls happen on every request - keep them fast.",
           "type": "timeseries",
@@ -528,7 +528,7 @@
       "collapsed": true,
       "panels": [
         {
-          "id": 13,
+          "id": 510,
           "title": "Request Rate vs Memory",
           "description": "Correlation analysis for memory leaks. Memory should stay relatively stable regardless of load. If heap grows with requests and doesn't drop back after load decreases, investigate memory leak. Goroutines should also stay bounded.",
           "type": "timeseries",
@@ -599,7 +599,7 @@
       "collapsed": true,
       "panels": [
         {
-          "id": 15,
+          "id": 610,
           "title": "Service Requests (selected range)",
           "description": "Request counts for the selected time range. Shows which services were most active in your selected window. Useful for investigating specific time periods.",
           "type": "bargauge",
@@ -645,7 +645,7 @@
           ]
         },
         {
-          "id": 14,
+          "id": 620,
           "title": "Service Totals (since start)",
           "description": "Cumulative request counts since container restart. Shows overall traffic distribution over entire uptime. Useful for capacity planning and understanding service load ratios.",
           "type": "bargauge",

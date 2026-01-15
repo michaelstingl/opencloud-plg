@@ -70,6 +70,18 @@ scripts/
 └── process_dashboard.py              # Download & process external dashboards
 ```
 
+### Panel ID Convention
+
+Panel IDs follow a row-based numbering scheme:
+
+| Element | IDs | Example |
+|---------|-----|---------|
+| Row panels | 100, 200, 300... | Row 200 = second section |
+| Panels in row | +10, +20, +30... | Panel 230 = 3rd panel in Row 200 |
+| No rows (Overview) | 10, 20, 30... | Flat structure |
+
+Benefits: Clear hierarchy, room for growth (insert 115 between 110/120), easy debugging.
+
 ## Usage
 
 These dashboards are designed for use with:

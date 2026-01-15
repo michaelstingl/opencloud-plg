@@ -5,7 +5,7 @@
   "tags": ["opencloud", "overview"],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 2,
+  "version": 3,
   "refresh": "30s",
   "time": {
     "from": "now-1h",
@@ -13,7 +13,7 @@
   },
   "panels": [
     {
-      "id": 1,
+      "id": 10,
       "title": "Requests/s",
       "description": "HTTP requests per second at the OpenCloud proxy. Measures current system load. Normal: 1-50 req/s for small teams. Yellow >100, Red >500 indicates high load or possible attack.",
       "type": "stat",
@@ -46,7 +46,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": 20,
       "title": "Error Rate",
       "description": "Percentage of failed requests (5xx errors, timeouts). Green <1% is normal. Yellow 1-5% indicates issues. Red >5% requires immediate investigation - check logs in Loki dashboard.",
       "type": "gauge",
@@ -81,7 +81,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": 30,
       "title": "P95 Latency",
       "description": "95% of all requests complete faster than this value. Reflects user experience for most users. Green <500ms is good. Yellow 0.5-2s is acceptable. Red >2s means noticeable delays for users.",
       "type": "stat",
@@ -114,7 +114,7 @@
       ]
     },
     {
-      "id": 4,
+      "id": 40,
       "title": "Goroutines",
       "description": "Number of active goroutines in the OpenCloud process. Normal: 500-1500. Steadily increasing value without decline may indicate a goroutine leak. Yellow >2000, Red >5000 requires investigation.",
       "type": "stat",
@@ -147,7 +147,7 @@
       ]
     },
     {
-      "id": 5,
+      "id": 50,
       "title": "Request Rate & Errors",
       "description": "Correlation between load and errors over time. Green line = requests (left axis), red line = errors (right axis). Do errors rise proportionally with requests? System is overloaded. Errors without request spike indicate other problems.",
       "type": "timeseries",
@@ -197,7 +197,7 @@
       ]
     },
     {
-      "id": 6,
+      "id": 60,
       "title": "Latency Percentiles",
       "description": "Response times by percentile: P50 (median, green) = typical user. P95 (yellow) = slow requests. P99 (red) = worst case. Large gap between P50 and P99 indicates outliers - check Request Details dashboard.",
       "type": "timeseries",
@@ -255,7 +255,7 @@
       ]
     },
     {
-      "id": 7,
+      "id": 70,
       "title": "Active Transfers",
       "description": "Active file transfers: Uploads (blue), Downloads (purple), Processing (orange). Processing = files being processed after upload (antivirus, indexing). High processing values may indicate slow ClamAV.",
       "type": "timeseries",
@@ -313,7 +313,7 @@
       ]
     },
     {
-      "id": 8,
+      "id": 80,
       "title": "Upload Pipeline",
       "description": "Upload lifecycle per minute: Initiated → Transfer Complete → Scanned (antivirus) → Finalized or Aborted. Gap between stages shows drop-off. Many Aborted = problem with uploads or antivirus.",
       "type": "timeseries",
@@ -382,7 +382,7 @@
       ]
     },
     {
-      "id": 9,
+      "id": 90,
       "title": "Event Queues",
       "description": "Async processing queues. Postprocessing = upload post-processing (antivirus, thumbnails). Search = search index updates. Values >0 are normal during activity but should not keep increasing. Yellow >10, Red >100 = backlog building up.",
       "type": "stat",
@@ -420,7 +420,7 @@
       ]
     },
     {
-      "id": 10,
+      "id": 100,
       "title": "Memory Usage",
       "description": "Heap memory usage of OpenCloud process. Normal: 50-200 MB. Yellow >512 MB, Red >1 GB. Steadily increasing value without decline after GC indicates memory leak. If issues persist: restart container.",
       "type": "stat",

@@ -19,14 +19,14 @@
   },
   "panels": [
     {
-      "id": 300,
+      "id": 100,
       "title": "NATS / JetStream (Loki)",
       "type": "row",
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
       "collapsed": false
     },
     {
-      "id": 301,
+      "id": 110,
       "title": "NATS Errors (24h)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": 302,
+      "id": 120,
       "title": "NATS Warnings (24h)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
@@ -99,7 +99,7 @@
       }
     },
     {
-      "id": 303,
+      "id": 130,
       "title": "NATS Config Warnings (24h)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
@@ -135,7 +135,7 @@
       }
     },
     {
-      "id": 304,
+      "id": 140,
       "title": "Filestore Warnings (24h)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
@@ -171,7 +171,7 @@
       }
     },
     {
-      "id": 305,
+      "id": 150,
       "title": "NATS Service Logs",
       "type": "logs",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 5 },
@@ -200,7 +200,7 @@
       "collapsed": false
     },
     {
-      "id": 1,
+      "id": 210,
       "title": "Activitylog Errors (Last 24h)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 0, "y": 14 },
@@ -237,7 +237,7 @@
       }
     },
     {
-      "id": 2,
+      "id": 220,
       "title": "Event Processing Errors",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 6, "y": 14 },
@@ -273,7 +273,7 @@
       }
     },
     {
-      "id": 3,
+      "id": 230,
       "title": "Store Errors",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 12, "y": 14 },
@@ -309,7 +309,7 @@
       }
     },
     {
-      "id": 4,
+      "id": 240,
       "title": "Unknown Events",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 18, "y": 14 },
@@ -345,7 +345,7 @@
       }
     },
     {
-      "id": 5,
+      "id": 250,
       "title": "Error Rate Over Time",
       "type": "timeseries",
       "gridPos": { "h": 6, "w": 24, "x": 0, "y": 18 },
@@ -376,7 +376,7 @@
       }
     },
     {
-      "id": 6,
+      "id": 260,
       "title": "All Activitylog Errors",
       "type": "logs",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 24 },
