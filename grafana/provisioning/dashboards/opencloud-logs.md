@@ -82,17 +82,17 @@ timeout                 # Timeout errors
 
 ## Panels
 
-### Overview (Top Row)
+### Overview
 
-| Panel | Shows |
-|-------|-------|
-| **Log Volume by Level** | Stacked bars over time (red=error, orange=warn, blue=info, gray=debug) |
-| **Error Count** | Total errors (green <10, yellow <100, red ≥100) |
-| **Warning Count** | Total warnings (green <50, yellow <200, orange ≥200) |
-| **Total Logs** | Total log lines in time range |
-| **Error Rate** | Gauge showing % of error logs (green <1%, yellow <5%, red ≥10%) |
+| Panel | Shows | Thresholds |
+|-------|-------|------------|
+| **Log Volume by Level** | Stacked bars over time | red=error, orange=warn, blue=info, gray=debug |
+| **Error Count** | Total errors in time range | green <10, yellow <100, red ≥100 |
+| **Warning Count** | Total warnings in time range | green <50, yellow <200, orange ≥200 |
+| **Total Logs** | Total log lines in time range | blue (info) |
+| **Error Rate** | % of error logs | green <1%, yellow <5%, red ≥10% |
 
-### Distribution (Middle Row)
+### Distribution
 
 | Panel | Shows |
 |-------|-------|
@@ -101,7 +101,7 @@ timeout                 # Timeout errors
 | **Top Components by Errors** | Components ranked by error count |
 | **Log Volume by Component** | Component activity over time |
 
-### Detailed Logs (Bottom)
+### Detailed Logs
 
 | Panel | Shows |
 |-------|-------|
