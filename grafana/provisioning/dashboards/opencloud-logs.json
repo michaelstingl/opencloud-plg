@@ -2,11 +2,15 @@
   "uid": "opencloud-logs",
   "title": "OpenCloud Logs",
   "description": "Log monitoring for all OpenCloud services and components with flexible filtering",
-  "tags": ["opencloud", "logs", "loki"],
+  "tags": [
+    "opencloud",
+    "logs",
+    "loki"
+  ],
   "timezone": "browser",
   "schemaVersion": 39,
   "version": 6,
-  "refresh": "30s",
+  "refresh": "auto",
   "time": {
     "from": "now-1h",
     "to": "now"
@@ -17,13 +21,19 @@
         "name": "service",
         "label": "Service",
         "type": "query",
-        "datasource": { "type": "loki", "uid": "loki" },
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
         "query": "label_values(service)",
         "refresh": 2,
         "multi": true,
         "includeAll": true,
         "allValue": ".+",
-        "current": { "text": "opencloud", "value": "opencloud" },
+        "current": {
+          "text": "opencloud",
+          "value": "opencloud"
+        },
         "sort": 1
       },
       {
@@ -34,27 +44,46 @@
         "multi": true,
         "includeAll": true,
         "allValue": ".+",
-        "current": { "text": "proxy", "value": "proxy" }
+        "current": {
+          "text": "proxy",
+          "value": "proxy"
+        }
       },
       {
         "name": "level",
         "label": "Log Level",
         "type": "query",
-        "datasource": { "type": "loki", "uid": "loki" },
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
         "query": "label_values(level)",
         "refresh": 2,
         "multi": true,
         "includeAll": true,
         "allValue": ".+",
-        "current": { "text": "info", "value": "info" },
+        "current": {
+          "text": "info",
+          "value": "info"
+        },
         "sort": 1
       },
       {
         "name": "search",
         "label": "Search",
         "type": "textbox",
-        "current": { "selected": false, "text": "", "value": "" },
-        "options": [{ "selected": true, "text": "", "value": "" }]
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ]
       }
     ]
   },
@@ -63,7 +92,12 @@
       "id": 100,
       "title": "Overview",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
       "collapsed": false
     },
     {
@@ -71,15 +105,28 @@
       "title": "Log Volume by Level",
       "description": "Log volume over time grouped by log level. Spikes in error/warn indicate issues.",
       "type": "timeseries",
-      "gridPos": { "h": 6, "w": 16, "x": 0, "y": 1 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 6,
+        "w": 16,
+        "x": 0,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "drawStyle": "bars",
             "fillOpacity": 80,
-            "stacking": { "mode": "normal", "group": "A" },
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "showPoints": "never"
@@ -87,20 +134,100 @@
           "unit": "short"
         },
         "overrides": [
-          { "matcher": { "id": "byName", "options": "error" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] },
-          { "matcher": { "id": "byName", "options": "warn" }, "properties": [{ "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }] },
-          { "matcher": { "id": "byName", "options": "warning" }, "properties": [{ "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }] },
-          { "matcher": { "id": "byName", "options": "info" }, "properties": [{ "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }] },
-          { "matcher": { "id": "byName", "options": "debug" }, "properties": [{ "id": "color", "value": { "fixedColor": "gray", "mode": "fixed" } }] }
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "error"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "warn"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "warning"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "info"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "debug"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "gray",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
         ]
       },
       "options": {
-        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum by (level) (count_over_time({service=~\"$service\", level=~\"$level\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\" [$__auto]))",
           "legendFormat": "{{level}}",
           "refId": "A"
@@ -112,17 +239,36 @@
       "title": "Error Count",
       "description": "Total errors in selected time range",
       "type": "stat",
-      "gridPos": { "h": 3, "w": 4, "x": 16, "y": 1 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 10 },
-              { "color": "red", "value": 100 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
             ]
           },
           "unit": "short"
@@ -131,11 +277,20 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false }
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum(count_over_time({service=~\"$service\", level=\"error\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\" [$__range]))",
           "refId": "A"
         }
@@ -146,17 +301,36 @@
       "title": "Warning Count",
       "description": "Total warnings in selected time range",
       "type": "stat",
-      "gridPos": { "h": 3, "w": 4, "x": 20, "y": 1 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 50 },
-              { "color": "orange", "value": 200 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 50
+              },
+              {
+                "color": "orange",
+                "value": 200
+              }
             ]
           },
           "unit": "short"
@@ -165,11 +339,20 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false }
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum(count_over_time({service=~\"$service\", level=~\"warn|warning\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\" [$__range]))",
           "refId": "A"
         }
@@ -180,14 +363,29 @@
       "title": "Total Logs",
       "description": "Total log lines in selected time range",
       "type": "stat",
-      "gridPos": { "h": 3, "w": 4, "x": 16, "y": 4 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 4
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "blue", "value": null }]
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         }
@@ -195,11 +393,20 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false }
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum(count_over_time({service=~\"$service\", level=~\"$level\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\" [$__range]))",
           "refId": "A"
         }
@@ -210,33 +417,64 @@
       "title": "Error Rate",
       "description": "Percentage of error logs",
       "type": "gauge",
-      "gridPos": { "h": 3, "w": 4, "x": 20, "y": 4 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 4
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "max": 100,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "orange", "value": 5 },
-              { "color": "red", "value": 10 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
             ]
           },
           "unit": "percent"
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum(count_over_time({service=~\"$service\", level=\"error\"} | json | service_extracted=~\"$component\" [$__range])) / sum(count_over_time({service=~\"$service\"} | json | service_extracted=~\"$component\" [$__range])) * 100",
           "refId": "A"
         }
@@ -246,7 +484,12 @@
       "id": 200,
       "title": "Distribution",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
       "collapsed": false
     },
     {
@@ -254,21 +497,44 @@
       "title": "Logs by Service",
       "description": "Log distribution by Docker Compose service",
       "type": "piechart",
-      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 8 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 8
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" }
+          "color": {
+            "mode": "palette-classic"
+          }
         }
       },
       "options": {
-        "legend": { "displayMode": "list", "placement": "right", "showLegend": true },
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
         "pieType": "pie",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false }
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum by (service) (count_over_time({service=~\"$service\", level=~\"$level\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\" [$__range]))",
           "legendFormat": "{{service}}",
           "refId": "A"
@@ -280,21 +546,44 @@
       "title": "Logs by Component",
       "description": "Log distribution by OpenCloud internal component",
       "type": "piechart",
-      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 8 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 8
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" }
+          "color": {
+            "mode": "palette-classic"
+          }
         }
       },
       "options": {
-        "legend": { "displayMode": "list", "placement": "right", "showLegend": true },
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
         "pieType": "pie",
-        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false }
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum by (service_extracted) (count_over_time({service=~\"$service\", level=~\"$level\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\" [$__range]))",
           "legendFormat": "{{service_extracted}}",
           "refId": "A"
@@ -306,18 +595,40 @@
       "title": "Top Components by Errors",
       "description": "Components with most errors - sorted by error count",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 8 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 8
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1000 },
-              { "color": "orange", "value": 10000 },
-              { "color": "red", "value": 50000 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1000
+              },
+              {
+                "color": "orange",
+                "value": 10000
+              },
+              {
+                "color": "red",
+                "value": 50000
+              }
             ]
           },
           "unit": "short",
@@ -329,7 +640,13 @@
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showPercentChange": false,
         "textMode": "value_and_name",
         "wideLayout": true
@@ -345,7 +662,10 @@
       ],
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "topk(5, sum by (service_extracted) (count_over_time({service=~\"$service\", level=\"error\"} | json | service_extracted=~\"$component\" [$__range])))",
           "legendFormat": "",
           "refId": "A",
@@ -358,15 +678,28 @@
       "title": "Log Volume by Component",
       "description": "Log volume over time grouped by OpenCloud component",
       "type": "timeseries",
-      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 8 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 8
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "drawStyle": "line",
             "fillOpacity": 20,
-            "stacking": { "mode": "normal", "group": "A" },
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "showPoints": "never"
@@ -375,12 +708,22 @@
         }
       },
       "options": {
-        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "sum by (service_extracted) (count_over_time({service=~\"$service\", level=~\"$level\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\" [$__auto]))",
           "legendFormat": "{{service_extracted}}",
           "refId": "A"
@@ -391,7 +734,12 @@
       "id": 300,
       "title": "Detailed Logs",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
       "collapsed": false
     },
     {
@@ -399,8 +747,16 @@
       "title": "Logs",
       "description": "Live log stream. Use filters above to narrow results.",
       "type": "logs",
-      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 15 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
@@ -413,7 +769,10 @@
       },
       "targets": [
         {
-          "datasource": { "type": "loki", "uid": "loki" },
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "expr": "{service=~\"$service\", level=~\"$level\"} | json | service_extracted=~\"$component\" |~ \"(?i)$search\"",
           "refId": "A"
         }

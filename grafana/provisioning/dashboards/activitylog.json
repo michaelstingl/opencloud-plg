@@ -2,11 +2,16 @@
   "uid": "activitylog-debug",
   "title": "OpenCloud Activitylog Debug",
   "description": "Monitor activitylog service, NATS, and event processing for upstream issue tracking",
-  "tags": ["opencloud", "activitylog", "nats", "debug"],
+  "tags": [
+    "opencloud",
+    "activitylog",
+    "nats",
+    "debug"
+  ],
   "timezone": "browser",
   "schemaVersion": 39,
   "version": 3,
-  "refresh": "30s",
+  "refresh": "auto",
   "time": {
     "from": "now-1h",
     "to": "now"
@@ -22,15 +27,28 @@
       "id": 100,
       "title": "NATS / JetStream (Loki)",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
       "collapsed": false
     },
     {
       "id": 110,
       "title": "NATS Errors (24h)",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"nats\"` | json | level=`error` [24h]))",
@@ -43,7 +61,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -53,8 +73,14 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "red", "value": 1 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
             ]
           },
           "unit": "short"
@@ -65,8 +91,16 @@
       "id": 120,
       "title": "NATS Warnings (24h)",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"nats\"` | json | level=`warn` [24h]))",
@@ -79,7 +113,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -89,9 +125,18 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "orange", "value": 10 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 10
+              }
             ]
           },
           "unit": "short"
@@ -102,8 +147,16 @@
       "id": 130,
       "title": "NATS Config Warnings (24h)",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `nats configuration` [24h]))",
@@ -116,7 +169,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -126,8 +181,14 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              }
             ]
           },
           "unit": "short"
@@ -138,8 +199,16 @@
       "id": 140,
       "title": "Filestore Warnings (24h)",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"nats\"` |= `Filestore` [24h]))",
@@ -152,7 +221,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -162,8 +233,14 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              }
             ]
           },
           "unit": "short"
@@ -174,8 +251,16 @@
       "id": 150,
       "title": "NATS Service Logs",
       "type": "logs",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 5 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "{container=\"opencloud-opencloud-1\"} |= `\"service\":\"nats\"` | json | level=~`error|warn`",
@@ -196,15 +281,28 @@
       "id": 200,
       "title": "Activitylog Errors (Loki)",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 13 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
       "collapsed": false
     },
     {
       "id": 210,
       "title": "Activitylog Errors (Last 24h)",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 14 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 14
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"activitylog\"` |= `error` [24h]))",
@@ -217,7 +315,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -227,9 +327,18 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "red", "value": 10 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
             ]
           },
           "unit": "short"
@@ -240,8 +349,16 @@
       "id": 220,
       "title": "Event Processing Errors",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 14 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 14
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"activitylog\"` |= `could not process event` [24h]))",
@@ -254,7 +371,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -264,8 +383,14 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "red", "value": 1 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
             ]
           },
           "unit": "short"
@@ -276,8 +401,16 @@
       "id": 230,
       "title": "Store Errors",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 14 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 14
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"activitylog\"` |~ `error.*(store|activities)` [24h]))",
@@ -290,7 +423,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -300,8 +435,14 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "red", "value": 1 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
             ]
           },
           "unit": "short"
@@ -312,8 +453,16 @@
       "id": 240,
       "title": "Unknown Events",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 14 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 14
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum(count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"activitylog\"` |= `event not registered` [24h]))",
@@ -326,7 +475,9 @@
         "justifyMode": "auto",
         "textMode": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
@@ -336,8 +487,14 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              }
             ]
           },
           "unit": "short"
@@ -348,8 +505,16 @@
       "id": 250,
       "title": "Error Rate Over Time",
       "type": "timeseries",
-      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 18 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "sum by (level) (count_over_time({container=\"opencloud-opencloud-1\"} |= `\"service\":\"activitylog\"` | json | level=~`error|warn` [$__interval]))",
@@ -358,20 +523,56 @@
         }
       ],
       "options": {
-        "legend": { "showLegend": true, "displayMode": "list", "placement": "bottom" }
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
       },
       "fieldConfig": {
         "defaults": {
           "custom": {
             "drawStyle": "bars",
             "fillOpacity": 50,
-            "stacking": { "mode": "normal" }
+            "stacking": {
+              "mode": "normal"
+            }
           },
-          "color": { "mode": "palette-classic" }
+          "color": {
+            "mode": "palette-classic"
+          }
         },
         "overrides": [
-          { "matcher": { "id": "byName", "options": "error" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] },
-          { "matcher": { "id": "byName", "options": "warn" }, "properties": [{ "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }] }
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "error"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "warn"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
         ]
       }
     },
@@ -379,8 +580,16 @@
       "id": 260,
       "title": "All Activitylog Errors",
       "type": "logs",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 24 },
-      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
       "targets": [
         {
           "expr": "{container=\"opencloud-opencloud-1\"} |= `\"service\":\"activitylog\"` | json | level=~`error|warn`",

@@ -2,11 +2,15 @@
   "uid": "opencloud-uploads",
   "title": "OpenCloud Upload Pipeline",
   "description": "Deep dive into file uploads, antivirus scanning with ClamAV, and async processing queues. Use this dashboard to troubleshoot upload failures and identify bottlenecks.",
-  "tags": ["opencloud", "uploads", "antivirus"],
+  "tags": [
+    "opencloud",
+    "uploads",
+    "antivirus"
+  ],
   "timezone": "browser",
   "schemaVersion": 39,
   "version": 4,
-  "refresh": "30s",
+  "refresh": "auto",
   "time": {
     "from": "now-1h",
     "to": "now"
@@ -16,7 +20,12 @@
       "id": 100,
       "title": "Key Indicators",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
       "collapsed": false
     },
     {
@@ -24,24 +33,47 @@
       "title": "Active Uploads",
       "description": "Currently active file uploads. Shows how many files are being uploaded right now. High values during off-hours may indicate backup jobs or sync clients. Yellow >10, Red >50.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 10 },
-              { "color": "red", "value": 50 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -57,24 +89,47 @@
       "title": "Processing",
       "description": "Files in post-upload processing (antivirus scan, thumbnail generation, search indexing). High values indicate ClamAV is slow or backlog is building. Should return to 0 shortly after uploads complete.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "blue", "value": null },
-              { "color": "yellow", "value": 20 },
-              { "color": "red", "value": 100 }
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 20
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -90,24 +145,47 @@
       "title": "Active Downloads",
       "description": "Currently active file downloads. High values indicate heavy read activity. Downloads are less resource-intensive than uploads since no post-processing is needed.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "purple", "value": null },
-              { "color": "yellow", "value": 50 },
-              { "color": "red", "value": 200 }
+              {
+                "color": "purple",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 200
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -123,26 +201,49 @@
       "title": "Upload Success Rate",
       "description": "Percentage of uploads that complete successfully (finalized / initiated). Green >98% is healthy. Yellow 90-98% needs attention. Red <90% indicates serious issues - check antivirus logs or storage.",
       "type": "gauge",
-      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "percent",
           "min": 0,
           "max": 100,
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "red", "value": null },
-              { "color": "yellow", "value": 90 },
-              { "color": "green", "value": 98 }
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 90
+              },
+              {
+                "color": "green",
+                "value": 98
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
@@ -158,24 +259,47 @@
       "title": "Postprocessing Queue",
       "description": "Events waiting to be processed after upload (antivirus, thumbnails). Should normally be 0-5. Growing queue indicates processing can't keep up - check ClamAV performance or disk I/O.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 10 },
-              { "color": "red", "value": 50 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -191,24 +315,47 @@
       "title": "Search Queue",
       "description": "Events waiting to update the search index. New files need to be indexed for search. Growing queue may indicate search service issues. Check search logs if persistently high.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 10 },
-              { "color": "red", "value": 50 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -223,7 +370,12 @@
       "id": 200,
       "title": "Upload Pipeline",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
       "collapsed": false
     },
     {
@@ -231,8 +383,16 @@
       "title": "Upload Pipeline Flow",
       "description": "Upload session lifecycle per minute: Initiated (upload started) → Transfer Complete (all bytes received) → Scanned (ClamAV check) → Finalized (success) or Aborted (failed). Watch for gaps between stages - indicates where uploads get stuck.",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
@@ -246,52 +406,121 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Initiated" },
+            "matcher": {
+              "id": "byName",
+              "options": "Initiated"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Transfer Complete" },
+            "matcher": {
+              "id": "byName",
+              "options": "Transfer Complete"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "light-blue", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Scanned (AV)" },
+            "matcher": {
+              "id": "byName",
+              "options": "Scanned (AV)"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Finalized" },
+            "matcher": {
+              "id": "byName",
+              "options": "Finalized"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Aborted" },
+            "matcher": {
+              "id": "byName",
+              "options": "Aborted"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Restarted" },
+            "matcher": {
+              "id": "byName",
+              "options": "Restarted"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Postprocessing Done" },
+            "matcher": {
+              "id": "byName",
+              "options": "Postprocessing Done"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "semi-dark-green", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
             ]
           }
         ]
       },
       "options": {
-        "tooltip": { "mode": "multi", "sort": "desc" },
-        "legend": { "displayMode": "list", "placement": "bottom" }
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
       },
       "targets": [
         {
@@ -328,7 +557,12 @@
       "id": 300,
       "title": "Upload Statistics",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
       "collapsed": false
     },
     {
@@ -336,30 +570,62 @@
       "title": "Uploads in Selected Range",
       "description": "Upload counts for the time range selected above (e.g., 'Last 1 hour'). Shows activity in your selected window. Compare stages to identify where uploads fail: Initiated → Transfer Complete → Scanned → Finalized.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 12, "x": 0, "y": 15 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "palette-classic" }
+          "color": {
+            "mode": "palette-classic"
+          }
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Finalized" },
+            "matcher": {
+              "id": "byName",
+              "options": "Finalized"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Aborted" },
+            "matcher": {
+              "id": "byName",
+              "options": "Aborted"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
             ]
           }
         ]
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "none",
         "textMode": "value_and_name"
@@ -392,30 +658,62 @@
       "title": "Upload Totals (since start)",
       "description": "Cumulative upload counts since container restart. Shows overall system health over entire uptime. Useful for success rate calculation: Finalized/Initiated. If Transfer Complete < Initiated: network issues. If Scanned < Finalized: AV bypass.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 12, "x": 12, "y": 15 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "palette-classic" }
+          "color": {
+            "mode": "palette-classic"
+          }
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Finalized" },
+            "matcher": {
+              "id": "byName",
+              "options": "Finalized"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Aborted" },
+            "matcher": {
+              "id": "byName",
+              "options": "Aborted"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
             ]
           }
         ]
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "none",
         "textMode": "value_and_name"
@@ -451,7 +749,12 @@
       "id": 400,
       "title": "Transfer Activity",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 19 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
       "collapsed": true,
       "panels": [
         {
@@ -459,8 +762,16 @@
           "title": "Active Transfers Over Time",
           "description": "Concurrent transfers stacked over time. Uploads (blue), Downloads (purple), Processing (orange), Assimilation (green = PosixFS metadata sync). Helps identify peak usage times and correlate with performance issues.",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 20
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "short",
@@ -470,39 +781,83 @@
                 "fillOpacity": 30,
                 "pointSize": 5,
                 "showPoints": "never",
-                "stacking": { "mode": "normal" }
+                "stacking": {
+                  "mode": "normal"
+                }
               }
             },
             "overrides": [
               {
-                "matcher": { "id": "byName", "options": "Uploads" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Uploads"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "blue",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Downloads" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Downloads"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "purple",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Processing" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Processing"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Assimilation" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Assimilation"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "light-green", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "light-green",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               }
             ]
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
           },
           "targets": [
             {
@@ -528,8 +883,16 @@
           "title": "Event Queue Depth",
           "description": "Async event queue backlog over time. Unprocessed = waiting to be handled. Redelivered = events that failed and are being retried. Rising redelivered count indicates persistent failures - check service logs.",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 20
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "short",
@@ -543,40 +906,91 @@
             },
             "overrides": [
               {
-                "matcher": { "id": "byName", "options": "Postprocessing Unprocessed" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Postprocessing Unprocessed"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "yellow",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Postprocessing Redelivered" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Postprocessing Redelivered"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Search Unprocessed" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Search Unprocessed"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "blue",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Search Redelivered" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Search Redelivered"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "purple",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Postprocessing Outstanding Acks" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Postprocessing Outstanding Acks"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               }
             ]
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
           },
           "targets": [
             {
@@ -607,7 +1021,12 @@
       "id": 500,
       "title": "Processing Performance",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 20 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
       "collapsed": true,
       "panels": [
         {
@@ -615,8 +1034,16 @@
           "title": "Thumbnail Generation",
           "description": "Time to generate image/document thumbnails. P50 (green) = typical. P95 (yellow) = slow. P99 (red) = worst case. Slow thumbnails affect file browser responsiveness. Large files or complex documents take longer.",
           "type": "timeseries",
-          "gridPos": { "h": 6, "w": 8, "x": 0, "y": 21 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 0,
+            "y": 21
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "s",
@@ -630,28 +1057,61 @@
             },
             "overrides": [
               {
-                "matcher": { "id": "byName", "options": "P50" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "P50"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "green",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "P95" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "P95"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "yellow",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "P99" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "P99"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               }
             ]
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
           },
           "targets": [
             {
@@ -673,8 +1133,16 @@
           "title": "Postprocessing Duration",
           "description": "Time to complete async postprocessing (antivirus, thumbnails, search indexing). P50 = typical. P95 = slow. P99 = worst case. High values indicate processing bottlenecks.",
           "type": "timeseries",
-          "gridPos": { "h": 6, "w": 8, "x": 8, "y": 21 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 8,
+            "y": 21
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "s",
@@ -688,28 +1156,61 @@
             },
             "overrides": [
               {
-                "matcher": { "id": "byName", "options": "P50" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "P50"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "green",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "P95" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "P95"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "yellow",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "P99" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "P99"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
                 ]
               }
             ]
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
           },
           "targets": [
             {
@@ -731,26 +1232,49 @@
           "title": "Drop-off Analysis (selected range)",
           "description": "Upload success rates for selected time range. Shows % of uploads completing each stage. All bars should be near 100%. Low 'Transfer Complete' = network issues. Low 'AV Scanned' = ClamAV rejections. Low 'Finalized' = post-processing failures.",
           "type": "bargauge",
-          "gridPos": { "h": 6, "w": 8, "x": 16, "y": 21 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 16,
+            "y": 21
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "percent",
               "min": 0,
               "max": 100,
-              "color": { "mode": "thresholds" },
+              "color": {
+                "mode": "thresholds"
+              },
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
-                  { "color": "red", "value": null },
-                  { "color": "yellow", "value": 80 },
-                  { "color": "green", "value": 95 }
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 80
+                  },
+                  {
+                    "color": "green",
+                    "value": 95
+                  }
                 ]
               }
             }
           },
           "options": {
-            "reduceOptions": { "calcs": ["lastNotNull"] },
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
             "orientation": "horizontal",
             "displayMode": "gradient",
             "showUnfilled": true

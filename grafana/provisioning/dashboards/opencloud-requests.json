@@ -2,11 +2,15 @@
   "uid": "opencloud-requests",
   "title": "OpenCloud Request Details",
   "description": "Performance analysis dashboard. Use this to investigate latency issues, identify slow services, and correlate load with resource usage. Start here when users report slowness.",
-  "tags": ["opencloud", "requests", "performance"],
+  "tags": [
+    "opencloud",
+    "requests",
+    "performance"
+  ],
   "timezone": "browser",
   "schemaVersion": 39,
   "version": 4,
-  "refresh": "30s",
+  "refresh": "auto",
   "time": {
     "from": "now-1h",
     "to": "now"
@@ -16,7 +20,12 @@
       "id": 100,
       "title": "Key Indicators",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
       "collapsed": false
     },
     {
@@ -24,22 +33,39 @@
       "title": "Total Requests/s",
       "description": "Total HTTP requests per second across all services. Baseline for understanding current load. Compare with historical values to identify traffic patterns or anomalies.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "reqps",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null }
+              {
+                "color": "green",
+                "value": null
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -55,24 +81,47 @@
       "title": "Error Rate",
       "description": "Percentage of failed requests. Should be <1% under normal conditions. Spikes here warrant immediate investigation in Loki logs.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "percent",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "red", "value": 5 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -88,24 +137,47 @@
       "title": "P50 Latency",
       "description": "Median response time - what the typical user experiences. Should be <100ms for snappy UI. Higher values indicate general slowness affecting everyone.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 0.1 },
-              { "color": "red", "value": 0.5 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.1
+              },
+              {
+                "color": "red",
+                "value": 0.5
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -121,24 +193,47 @@
       "title": "P95 Latency",
       "description": "95th percentile - slow requests affecting 5% of users. Gap between P50 and P95 shows consistency. Large gap = some requests are much slower than others.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 0.5 },
-              { "color": "red", "value": 2 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -154,24 +249,47 @@
       "title": "P99 Latency",
       "description": "99th percentile - worst case for almost all users. Very high P99 with normal P50 indicates occasional slow operations (large file ops, complex searches, or resource contention).",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "red", "value": 5 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -187,24 +305,47 @@
       "title": "Errors/s",
       "description": "Absolute error count per second. More useful than % when traffic is low. Even 1 error/s during low traffic periods could be 50% error rate.",
       "type": "stat",
-      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "red", "value": 10 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
             ]
           }
         }
       },
       "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
         "colorMode": "value",
         "graphMode": "area"
       },
@@ -219,7 +360,12 @@
       "id": 200,
       "title": "Latency Analysis",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
       "collapsed": false
     },
     {
@@ -227,8 +373,16 @@
       "title": "Latency Heatmap",
       "description": "Latency distribution visualization. Darker colors = more requests at that latency. Look for: consistent band (good), spreading pattern (degradation), bimodal distribution (two different request types). Hover for exact counts.",
       "type": "heatmap",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "options": {
         "calculate": false,
         "cellGap": 1,
@@ -241,11 +395,22 @@
           "scheme": "Oranges",
           "steps": 64
         },
-        "exemplars": { "color": "rgba(255,0,255,0.7)" },
-        "filterValues": { "le": 1e-9 },
-        "legend": { "show": true },
-        "rowsFrame": { "layout": "auto" },
-        "tooltip": { "show": true, "yHistogram": true },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1E-9
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "show": true,
+          "yHistogram": true
+        },
         "yAxis": {
           "axisPlacement": "left",
           "reverse": false,
@@ -265,8 +430,16 @@
       "title": "Latency Percentiles Over Time",
       "description": "Track how latency changes over time. Parallel lines = consistent performance. Diverging lines = some requests getting slower. Sudden jumps correlate with deployments, traffic spikes, or external issues.",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
@@ -280,34 +453,76 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "P50" },
+            "matcher": {
+              "id": "byName",
+              "options": "P50"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "P90" },
+            "matcher": {
+              "id": "byName",
+              "options": "P90"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "P95" },
+            "matcher": {
+              "id": "byName",
+              "options": "P95"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "P99" },
+            "matcher": {
+              "id": "byName",
+              "options": "P99"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
             ]
           }
         ]
       },
       "options": {
-        "tooltip": { "mode": "multi", "sort": "desc" },
-        "legend": { "displayMode": "list", "placement": "bottom" }
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
       },
       "targets": [
         {
@@ -333,8 +548,16 @@
       "title": "Request Rate vs Errors",
       "description": "Does load cause errors? If errors spike when requests spike, system is overwhelmed. If errors spike without request spike, something else is wrong (disk full, external service down, bug).",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -347,25 +570,58 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Requests/s" },
+            "matcher": {
+              "id": "byName",
+              "options": "Requests/s"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } },
-              { "id": "unit", "value": "reqps" }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "reqps"
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Errors/s" },
+            "matcher": {
+              "id": "byName",
+              "options": "Errors/s"
+            },
             "properties": [
-              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } },
-              { "id": "custom.axisPlacement", "value": "right" },
-              { "id": "unit", "value": "short" }
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              }
             ]
           }
         ]
       },
       "options": {
-        "tooltip": { "mode": "multi", "sort": "desc" },
-        "legend": { "displayMode": "list", "placement": "bottom" }
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
       },
       "targets": [
         {
@@ -382,7 +638,12 @@
       "id": 300,
       "title": "Service Breakdown",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 22 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
       "collapsed": true,
       "panels": [
         {
@@ -390,8 +651,16 @@
           "title": "HTTP Requests by Service",
           "description": "External-facing HTTP services. Frontend = web UI/API. WebDAV = file sync clients (desktop/mobile apps). OCM = Open Cloud Mesh federation. Helps identify which interface is under load.",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 23 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 23
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "reqps",
@@ -401,13 +670,21 @@
                 "fillOpacity": 20,
                 "pointSize": 5,
                 "showPoints": "never",
-                "stacking": { "mode": "normal" }
+                "stacking": {
+                  "mode": "normal"
+                }
               }
             }
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
           },
           "targets": [
             {
@@ -433,8 +710,16 @@
           "title": "gRPC Requests by Service",
           "description": "Internal microservice communication. Gateway = central router. Users/Groups = identity lookups. Sharing = share operations. High traffic on one service may indicate bottleneck or inefficient queries.",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 23 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 23
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "reqps",
@@ -444,13 +729,21 @@
                 "fillOpacity": 20,
                 "pointSize": 5,
                 "showPoints": "never",
-                "stacking": { "mode": "normal" }
+                "stacking": {
+                  "mode": "normal"
+                }
               }
             }
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
           },
           "targets": [
             {
@@ -485,7 +778,12 @@
       "id": 400,
       "title": "Endpoint Analysis",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 23 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
       "collapsed": true,
       "panels": [
         {
@@ -493,8 +791,16 @@
           "title": "Microservice Latency by Endpoint",
           "description": "Average latency per internal API endpoint. Shows top 10 slowest. Useful for identifying which specific operations are slow. RoleService, PermissionService calls happen on every request - keep them fast.",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 24 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "s",
@@ -508,8 +814,14 @@
             }
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "table", "placement": "right" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "table",
+              "placement": "right"
+            }
           },
           "targets": [
             {
@@ -524,7 +836,12 @@
       "id": 500,
       "title": "Resource Correlation",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 24 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
       "collapsed": true,
       "panels": [
         {
@@ -532,8 +849,16 @@
           "title": "Request Rate vs Memory",
           "description": "Correlation analysis for memory leaks. Memory should stay relatively stable regardless of load. If heap grows with requests and doesn't drop back after load decreases, investigate memory leak. Goroutines should also stay bounded.",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 25 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 25
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -546,33 +871,81 @@
             },
             "overrides": [
               {
-                "matcher": { "id": "byName", "options": "Requests/s" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Requests/s"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } },
-                  { "id": "unit", "value": "reqps" }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "green",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "unit",
+                    "value": "reqps"
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Heap Memory" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Heap Memory"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } },
-                  { "id": "custom.axisPlacement", "value": "right" },
-                  { "id": "unit", "value": "bytes" }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "blue",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.axisPlacement",
+                    "value": "right"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Goroutines" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Goroutines"
+                },
                 "properties": [
-                  { "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } },
-                  { "id": "custom.axisPlacement", "value": "right" },
-                  { "id": "unit", "value": "short" }
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "purple",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.axisPlacement",
+                    "value": "right"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  }
                 ]
               }
             ]
           },
           "options": {
-            "tooltip": { "mode": "multi", "sort": "desc" },
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            }
           },
           "targets": [
             {
@@ -595,7 +968,12 @@
       "id": 600,
       "title": "Service Totals",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 25 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
       "collapsed": true,
       "panels": [
         {
@@ -603,16 +981,30 @@
           "title": "Service Requests (selected range)",
           "description": "Request counts for the selected time range. Shows which services were most active in your selected window. Useful for investigating specific time periods.",
           "type": "bargauge",
-          "gridPos": { "h": 6, "w": 12, "x": 0, "y": 26 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 0,
+            "y": 26
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "short",
-              "color": { "mode": "palette-classic" }
+              "color": {
+                "mode": "palette-classic"
+              }
             }
           },
           "options": {
-            "reduceOptions": { "calcs": ["lastNotNull"] },
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
             "orientation": "horizontal",
             "displayMode": "gradient",
             "showUnfilled": true
@@ -649,16 +1041,30 @@
           "title": "Service Totals (since start)",
           "description": "Cumulative request counts since container restart. Shows overall traffic distribution over entire uptime. Useful for capacity planning and understanding service load ratios.",
           "type": "bargauge",
-          "gridPos": { "h": 6, "w": 12, "x": 12, "y": 26 },
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": {
+            "h": 6,
+            "w": 12,
+            "x": 12,
+            "y": 26
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
               "unit": "short",
-              "color": { "mode": "palette-classic" }
+              "color": {
+                "mode": "palette-classic"
+              }
             }
           },
           "options": {
-            "reduceOptions": { "calcs": ["lastNotNull"] },
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
             "orientation": "horizontal",
             "displayMode": "gradient",
             "showUnfilled": true
