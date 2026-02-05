@@ -14,7 +14,7 @@ Self-monitoring dashboard for Prometheus itself.
 
 This is an **external dashboard** downloaded from Grafana.com during deployment. It is not maintained in this repository.
 
-The dashboard is processed by [`scripts/process_dashboard.py`](../../../scripts/process_dashboard.py) to:
+During deployment, the dashboard JSON is downloaded and processed to:
 - Set a stable UID (`prometheus-stats`) for consistent URLs
 - Remove grafana.com metadata (`__inputs`, `__requires`)
 - Replace datasource variables (`${DS_PROMETHEUS}` → `prometheus`)

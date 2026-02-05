@@ -1,3 +1,8 @@
+/**
+ * OpenCloud Overview Dashboard
+ * Quick health check — request rate, error rate, latency, transfers.
+ * @see docs/dashboards/opencloud-overview.md
+ */
 import { DashboardBuilder, FieldColorBuilder, FieldColorModeId } from '@grafana/grafana-foundation-sdk/dashboard';
 import { PanelBuilder as StatBuilder } from '@grafana/grafana-foundation-sdk/stat';
 import { PanelBuilder as GaugeBuilder } from '@grafana/grafana-foundation-sdk/gauge';

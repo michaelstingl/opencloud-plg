@@ -1,3 +1,8 @@
+/**
+ * OpenCloud Proxy Dashboard
+ * HTTP access log analysis for the reverse proxy.
+ * @see docs/dashboards/opencloud-proxy.md
+ */
 import {
   DashboardBuilder,
   RowBuilder,

@@ -1,3 +1,8 @@
+/**
+ * OpenCloud Logs Dashboard
+ * Log monitoring for all services and components with flexible filtering.
+ * @see docs/dashboards/opencloud-logs.md
+ */
 import {
   DashboardBuilder,
   RowBuilder,

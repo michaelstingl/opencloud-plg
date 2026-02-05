@@ -1,3 +1,8 @@
+/**
+ * OpenCloud Request Details Dashboard
+ * Performance analysis — latency heatmap, service breakdown, endpoint analysis.
+ * @see docs/dashboards/opencloud-requests.md
+ */
 import {
   DashboardBuilder,
   RowBuilder,

@@ -1,3 +1,8 @@
+/**
+ * Activitylog Debug Dashboard
+ * Debug activitylog service and NATS/JetStream event processing.
+ * @see docs/dashboards/activitylog.md
+ */
 import { DashboardBuilder, RowBuilder } from '@grafana/grafana-foundation-sdk/dashboard';
 import { PanelBuilder as StatBuilder } from '@grafana/grafana-foundation-sdk/stat';
 import { PanelBuilder as TimeseriesBuilder } from '@grafana/grafana-foundation-sdk/timeseries';

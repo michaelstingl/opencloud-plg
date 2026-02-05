@@ -1,3 +1,8 @@
+/**
+ * OpenCloud Upload Pipeline Dashboard
+ * File uploads, antivirus scanning, and async processing queues.
+ * @see docs/dashboards/opencloud-uploads.md
+ */
 import {
   DashboardBuilder,
   RowBuilder,
