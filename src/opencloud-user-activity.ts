@@ -77,7 +77,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .datasource(LOKI_DS)
       .gridPos({ h: 8, w: 12, x: 0, y: 1 })
       .withTarget(lokiQuery(
-        'sum by (status) (count_over_time({service="opencloud"} | json | service_extracted="proxy" | uri=~"/signin/v1/identifier/_/logon" |~ "(?i)$search" [$__auto]))',
+        'sum by (status) (count_over_time({service="opencloud"} | json | service_extracted="proxy" | path=~"/signin/v1/identifier/_/logon" |~ "(?i)$search" [$__auto]))',
         '{{status}}',
       ))
       .drawStyle(GraphDrawStyle.Bars)
@@ -123,7 +123,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .description('User self-service requests: profile updates, password changes. Filtered from proxy access logs on /graph/v1.0/me endpoints.')
       .datasource(LOKI_DS)
       .gridPos({ h: 8, w: 24, x: 0, y: 9 })
-      .withTarget(lokiQuery('{service="opencloud"} | json | service_extracted="proxy" | uri=~"/graph/v1.0/me.*" |~ "(?i)$search"'))
+      .withTarget(lokiQuery('{service="opencloud"} | json | service_extracted="proxy" | path=~"/graph/v1.0/me.*" |~ "(?i)$search"'))
       .dedupStrategy(LogsDedupStrategy.None)
       .enableLogDetails(true)
       .prettifyLogMessage(true)
@@ -147,7 +147,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .datasource(LOKI_DS)
       .gridPos({ h: 8, w: 16, x: 0, y: 18 })
       .withTarget(lokiQuery(
-        'sum by (Action) (count_over_time({service="opencloud"} | json | service_extracted="audit" | Action=~"$action" |~ "(?i)$search" [$__auto]))',
+        'sum by (Action) (count_over_time({service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search" [$__auto]))',
         '{{Action}}',
       ))
       .drawStyle(GraphDrawStyle.Bars)
@@ -177,7 +177,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .datasource(LOKI_DS)
       .gridPos({ h: 8, w: 8, x: 16, y: 18 })
       .withTarget(lokiQuery(
-        'sum by (Action) (count_over_time({service="opencloud"} | json | service_extracted="audit" | Action=~"$action" |~ "(?i)$search" [$__range]))',
+        'sum by (Action) (count_over_time({service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search" [$__range]))',
         '{{Action}}',
       ))
       .pieType(PieChartType.Pie)
@@ -195,7 +195,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .datasource(LOKI_DS)
       .gridPos({ h: 8, w: 24, x: 0, y: 26 })
       .withTarget(lokiInstantQuery(
-        'topk(50, sum by (Action, Message) (count_over_time({service="opencloud"} | json | service_extracted="audit" | Action=~"$action" |~ "(?i)$search" [$__range])))',
+        'topk(50, sum by (Action, Message) (count_over_time({service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search" [$__range])))',
         '',
       ))
       .withTransformation({ id: 'sortBy', options: { fields: {}, sort: [{ desc: true, field: 'Value' }] } })
@@ -232,7 +232,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .description('Raw audit log stream. Use Search variable and Action filter to narrow results.')
       .datasource(LOKI_DS)
       .gridPos({ h: 10, w: 24, x: 0, y: 34 })
-      .withTarget(lokiQuery('{service="opencloud"} | json | service_extracted="audit" | Action=~"$action" |~ "(?i)$search"'))
+      .withTarget(lokiQuery('{service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search"'))
       .dedupStrategy(LogsDedupStrategy.None)
       .enableLogDetails(true)
       .prettifyLogMessage(true)
