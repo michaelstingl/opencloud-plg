@@ -1,0 +1,22 @@
+{
+  "name": "opencloud-plg-dashboards",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun run build:activitylog && bun run build:opencloud-overview && bun run build:opencloud-logs && bun run build:opencloud-proxy && bun run build:opencloud-uploads && bun run build:opencloud-requests",
+    "build:activitylog": "bun src/activitylog.ts > grafana/provisioning/dashboards/activitylog.json",
+    "build:opencloud-overview": "bun src/opencloud-overview.ts > grafana/provisioning/dashboards/opencloud-overview.json",
+    "build:opencloud-logs": "bun src/opencloud-logs.ts > grafana/provisioning/dashboards/opencloud-logs.json",
+    "build:opencloud-proxy": "bun src/opencloud-proxy.ts > grafana/provisioning/dashboards/opencloud-proxy.json",
+    "build:opencloud-uploads": "bun src/opencloud-uploads.ts > grafana/provisioning/dashboards/opencloud-uploads.json",
+    "build:opencloud-requests": "bun src/opencloud-requests.ts > grafana/provisioning/dashboards/opencloud-requests.json",
+    "typecheck": "bunx tsc --noEmit"
+  },
+  "dependencies": {
+    "@grafana/grafana-foundation-sdk": "~11.6.0-cogv0.0.x"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

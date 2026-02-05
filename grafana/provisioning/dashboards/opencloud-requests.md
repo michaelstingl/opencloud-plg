@@ -6,7 +6,7 @@ Performance analysis dashboard for investigating latency issues and service beha
 |---|---|
 | **UID** | `opencloud-requests` |
 | **Datasource** | Prometheus |
-| **Refresh** | 30s |
+| **Refresh** | auto |
 
 ## When to Use
 

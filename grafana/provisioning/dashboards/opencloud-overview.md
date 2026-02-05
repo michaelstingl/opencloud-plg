@@ -6,7 +6,7 @@ Quick health check dashboard showing key metrics at a glance.
 |---|---|
 | **UID** | `opencloud-overview` |
 | **Datasource** | Prometheus |
-| **Refresh** | 30s |
+| **Refresh** | auto |
 
 ## Start Here
 

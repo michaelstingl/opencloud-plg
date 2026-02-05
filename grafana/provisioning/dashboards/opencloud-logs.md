@@ -6,7 +6,7 @@ Log monitoring for all OpenCloud services and components with flexible filtering
 |---|---|
 | **UID** | `opencloud-logs` |
 | **Datasource** | Loki |
-| **Refresh** | 30s |
+| **Refresh** | auto |
 
 ## When to Use
 

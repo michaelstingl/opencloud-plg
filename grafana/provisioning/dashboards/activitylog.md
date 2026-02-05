@@ -6,7 +6,7 @@ Debug dashboard for activitylog service and NATS/JetStream event processing.
 |---|---|
 | **UID** | `activitylog-debug` |
 | **Datasource** | Loki |
-| **Refresh** | 30s |
+| **Refresh** | auto |
 
 ## When to Use
 

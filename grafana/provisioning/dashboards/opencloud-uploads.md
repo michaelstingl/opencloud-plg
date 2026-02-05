@@ -6,7 +6,7 @@ Deep dive into file uploads, antivirus scanning, and async processing queues.
 |---|---|
 | **UID** | `opencloud-uploads` |
 | **Datasource** | Prometheus |
-| **Refresh** | 30s |
+| **Refresh** | auto |
 
 ## When to Use
 

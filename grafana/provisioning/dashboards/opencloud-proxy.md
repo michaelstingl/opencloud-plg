@@ -6,7 +6,7 @@ HTTP access log analysis for the OpenCloud reverse proxy.
 |---|---|
 | **UID** | `opencloud-proxy` |
 | **Datasource** | Loki |
-| **Refresh** | 30s |
+| **Refresh** | auto |
 
 ## When to Use
 

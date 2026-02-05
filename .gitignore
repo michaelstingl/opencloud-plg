@@ -1,3 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Generated dashboards (built during deployment)
+grafana/provisioning/dashboards/*.json
+
+# Bun
+# bun.lock is committed for reproducible builds (--frozen-lockfile)
+
 # Work directory for local development
 _work/
 
