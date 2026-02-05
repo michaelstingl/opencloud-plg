@@ -185,17 +185,17 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .reduceOptions(new ReduceDataOptionsBuilder().calcs(['sum']).fields('').values(false));
   })())
 
-  // 230 - Last Events (Table)
+  // 230 - Action Summary (Table)
   .withPanel((() => {
     resetRefId();
     return new TableBuilder()
       .id(230)
-      .title('Last Audit Events')
-      .description('Recent audit events with action type, message, and user details. Use Search variable to filter by email, UUID, or filename.')
+      .title('Action Summary')
+      .description('Audit event counts by action type over the selected time range.')
       .datasource(LOKI_DS)
-      .gridPos({ h: 8, w: 24, x: 0, y: 26 })
+      .gridPos({ h: 8, w: 8, x: 0, y: 26 })
       .withTarget(lokiInstantQuery(
-        'topk(50, sum by (Action, Message) (count_over_time({service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search" [$__range])))',
+        'sum by (Action) (count_over_time({service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search" [$__range]))',
         '',
       ))
       .withTransformation({ id: 'sortBy', options: { fields: {}, sort: [{ desc: true, field: 'Value' }] } })
@@ -205,17 +205,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       })
       .withOverride({
         matcher: { id: 'byName', options: 'Action' },
-        properties: [
-          { id: 'custom.width', value: 200 },
-          { id: 'displayName', value: 'Action' },
-        ],
-      })
-      .withOverride({
-        matcher: { id: 'byName', options: 'Message' },
-        properties: [
-          { id: 'custom.width', value: 500 },
-          { id: 'displayName', value: 'Message' },
-        ],
+        properties: [{ id: 'displayName', value: 'Action' }],
       })
       .withOverride({
         matcher: { id: 'byName', options: 'Value' },
@@ -223,15 +213,35 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       });
   })())
 
-  // 240 - Raw Audit Logs (Logs)
+  // 240 - Audit Event Stream (Logs, formatted)
   .withPanel((() => {
     resetRefId();
     return new LogsBuilder()
       .id(240)
-      .title('Raw Audit Logs')
-      .description('Raw audit log stream. Use Search variable and Action filter to narrow results.')
+      .title('Audit Event Stream')
+      .description('Human-readable audit trail. Shows action, message, user, and path. Click a line for full JSON details.')
       .datasource(LOKI_DS)
-      .gridPos({ h: 10, w: 24, x: 0, y: 34 })
+      .gridPos({ h: 10, w: 16, x: 8, y: 26 })
+      .withTarget(lokiQuery('{service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search" | line_format "{{ .Action }} | {{ .Message }}{{ if .Path }} | path={{ .Path }}{{ end }}"'))
+      .dedupStrategy(LogsDedupStrategy.None)
+      .enableLogDetails(true)
+      .prettifyLogMessage(false)
+      .showCommonLabels(false)
+      .showLabels(false)
+      .showTime(true)
+      .sortOrder(LogsSortOrder.Descending)
+      .wrapLogMessage(true);
+  })())
+
+  // 250 - Raw Audit Logs (Logs)
+  .withPanel((() => {
+    resetRefId();
+    return new LogsBuilder()
+      .id(250)
+      .title('Raw Audit Logs')
+      .description('Full JSON audit log stream. Use for debugging and detailed inspection.')
+      .datasource(LOKI_DS)
+      .gridPos({ h: 10, w: 24, x: 0, y: 36 })
       .withTarget(lokiQuery('{service="opencloud"} | json | App="admin_audit" | Action=~"$action" |~ "(?i)$search"'))
       .dedupStrategy(LogsDedupStrategy.None)
       .enableLogDetails(true)
@@ -244,7 +254,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
   })())
 
   // ── Row 3: Detailed Logs ──────────────────────────────────────────
-  .withRow(new RowBuilder('Detailed Logs').id(300).gridPos({ h: 1, w: 24, x: 0, y: 44 }))
+  .withRow(new RowBuilder('Detailed Logs').id(300).gridPos({ h: 1, w: 24, x: 0, y: 46 }))
 
   // 310 - All Logs (Logs)
   .withPanel((() => {
@@ -254,7 +264,7 @@ const dashboard = new DashboardBuilder('OpenCloud User Activity')
       .title('All OpenCloud Logs')
       .description('Unfiltered OpenCloud logs. Only filtered by Search variable. Use for correlation when investigating specific user activity.')
       .datasource(LOKI_DS)
-      .gridPos({ h: 12, w: 24, x: 0, y: 45 })
+      .gridPos({ h: 12, w: 24, x: 0, y: 47 })
       .withTarget(lokiQuery('{service="opencloud"} |~ "(?i)$search"'))
       .dedupStrategy(LogsDedupStrategy.None)
       .enableLogDetails(true)
