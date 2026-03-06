@@ -14,7 +14,9 @@ import {
 
 export const LOG_BACKEND = process.env.LOG_BACKEND ?? 'otlp';
 
-export const LOG_LEVEL_LABEL = LOG_BACKEND === 'otlp' ? 'detected_level' : 'level';
+// OTel config copies attributes.level → resource["level"] → Loki indexes as "level".
+// Both backends produce "level" as indexed stream label.
+export const LOG_LEVEL_LABEL = 'level';
 export const LOG_CONTAINER_LABEL = LOG_BACKEND === 'otlp' ? 'service_name' : 'container';
 
 // ── Datasources ──────────────────────────────────────────────────────
