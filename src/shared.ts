@@ -7,17 +7,13 @@ import {
   type DynamicConfigValue,
 } from '@grafana/grafana-foundation-sdk/dashboard';
 
-// ── Log backend config ──────────────────────────────────────────────
-// Default: otlp (OTel Collector → Loki OTLP endpoint)
-// Override: LOG_BACKEND=alloy for legacy Alloy native pipeline
-// Affects label names used in LogQL stream selectors.
+// ── Log label config ────────────────────────────────────────────────
+// OTel Collector → Loki OTLP endpoint.
+// OTel config copies container name → resource["service.name"] → Loki indexes as "service_name".
+// OTel config copies log level → resource["level"] → Loki indexes as "level".
 
-export const LOG_BACKEND = process.env.LOG_BACKEND ?? 'otlp';
-
-// OTel config copies attributes.level → resource["level"] → Loki indexes as "level".
-// Both backends produce "level" as indexed stream label.
 export const LOG_LEVEL_LABEL = 'level';
-export const LOG_CONTAINER_LABEL = LOG_BACKEND === 'otlp' ? 'service_name' : 'container';
+export const LOG_CONTAINER_LABEL = 'service_name';
 
 // ── Datasources ──────────────────────────────────────────────────────
 

@@ -24,7 +24,6 @@ import {
 } from '@grafana/grafana-foundation-sdk/common';
 import {
   LOKI_DS,
-  LOG_BACKEND,
   LOG_CONTAINER_LABEL,
   lokiQuery,
   greenRed,
@@ -35,9 +34,9 @@ import {
   resetRefId,
 } from './shared.js';
 
-// Stream selector label: alloy → container="opencloud-opencloud-1", otlp → service_name="opencloud"
+// Stream selector: service_name="opencloud-opencloud-1"
 const C = LOG_CONTAINER_LABEL;
-const CV = LOG_BACKEND === 'otlp' ? 'opencloud' : 'opencloud-opencloud-1';
+const CV = 'opencloud-opencloud-1';
 
 // ── Stat panel factory ───────────────────────────────────────────────
 
