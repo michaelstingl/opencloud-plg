@@ -42,6 +42,7 @@ import {
 } from '@grafana/grafana-foundation-sdk/common';
 import {
   LOKI_DS,
+  LOG_LEVEL_LABEL,
   lokiQuery,
   lokiInstantQuery,
   greenYellowRed,
@@ -65,6 +66,9 @@ const varService = new QueryVariableBuilder('service')
   .current({ text: 'opencloud', value: 'opencloud' })
   .sort(VariableSort.AlphabeticalAsc);
 
+// Level label name depends on log backend (alloy → "level", otlp → "detected_level")
+const L = LOG_LEVEL_LABEL;
+
 const varComponent = new CustomVariableBuilder('component')
   .label('Component')
   .values('proxy,storage-system,storage-users,storage-shares,storage-publiclink,auth-service,auth-app,auth-basic,auth-machine,frontend,gateway,graph,groups,users,idm,idp,nats,notifications,ocdav,ocm,postprocessing,sharing,activitylog,settings,thumbnails,app-provider,app-registry,clientlog,antivirus,search,sse,webfinger,collaboration,userlog,eventhistory,invitations,policies,audit')
@@ -76,7 +80,7 @@ const varComponent = new CustomVariableBuilder('component')
 const varLevel = new QueryVariableBuilder('level')
   .label('Log Level')
   .datasource(LOKI_DS)
-  .query('label_values(level)')
+  .query(`label_values(${L})`)
   .refresh(VariableRefresh.OnTimeRangeChanged)
   .multi(true)
   .includeAll(true)
@@ -118,7 +122,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .gridPos({ h: 6, w: 16, x: 0, y: 1 })
       .withTarget(
         lokiQuery(
-          'sum by (level) (count_over_time({service=~"$service", level=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__auto]))',
+          `sum by (${L}) (count_over_time({service=~"$service", ${L}=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__auto]))`,
           '{{level}}',
         ),
       )
@@ -148,7 +152,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .datasource(LOKI_DS)
       .gridPos({ h: 3, w: 4, x: 16, y: 1 })
       .withTarget(
-        lokiQuery('sum(count_over_time({service=~"$service", level="error"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))'),
+        lokiQuery(`sum(count_over_time({service=~"$service", ${L}="error"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))`),
       )
       .unit('short')
       .colorScheme(new FieldColorBuilder().mode(FieldColorModeId.Thresholds))
@@ -168,7 +172,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .datasource(LOKI_DS)
       .gridPos({ h: 3, w: 4, x: 20, y: 1 })
       .withTarget(
-        lokiQuery('sum(count_over_time({service=~"$service", level=~"warn|warning"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))'),
+        lokiQuery(`sum(count_over_time({service=~"$service", ${L}=~"warn|warning"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))`),
       )
       .unit('short')
       .colorScheme(new FieldColorBuilder().mode(FieldColorModeId.Thresholds))
@@ -188,7 +192,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .datasource(LOKI_DS)
       .gridPos({ h: 3, w: 4, x: 16, y: 4 })
       .withTarget(
-        lokiQuery('sum(count_over_time({service=~"$service", level=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))'),
+        lokiQuery(`sum(count_over_time({service=~"$service", ${L}=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))`),
       )
       .unit('short')
       .colorScheme(new FieldColorBuilder().mode(FieldColorModeId.Thresholds))
@@ -208,7 +212,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .datasource(LOKI_DS)
       .gridPos({ h: 3, w: 4, x: 20, y: 4 })
       .withTarget(
-        lokiQuery('sum(count_over_time({service=~"$service", level="error"} | json | service_extracted=~"$component" [$__range])) / sum(count_over_time({service=~"$service"} | json | service_extracted=~"$component" [$__range])) * 100'),
+        lokiQuery(`sum(count_over_time({service=~"$service", ${L}="error"} | json | service_extracted=~"$component" [$__range])) / sum(count_over_time({service=~"$service"} | json | service_extracted=~"$component" [$__range])) * 100`),
       )
       .unit('percent')
       .min(0)
@@ -236,7 +240,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .gridPos({ h: 6, w: 6, x: 0, y: 8 })
       .withTarget(
         lokiQuery(
-          'sum by (service) (count_over_time({service=~"$service", level=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))',
+          `sum by (service) (count_over_time({service=~"$service", ${L}=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))`,
           '{{service}}',
         ),
       )
@@ -256,7 +260,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .gridPos({ h: 6, w: 6, x: 6, y: 8 })
       .withTarget(
         lokiQuery(
-          'sum by (service_extracted) (count_over_time({service=~"$service", level=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))',
+          `sum by (service_extracted) (count_over_time({service=~"$service", ${L}=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__range]))`,
           '{{service_extracted}}',
         ),
       )
@@ -276,7 +280,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .gridPos({ h: 6, w: 6, x: 12, y: 8 })
       .withTarget(
         lokiInstantQuery(
-          'topk(5, sum by (service_extracted) (count_over_time({service=~"$service", level="error"} | json | service_extracted=~"$component" [$__range])))',
+          `topk(5, sum by (service_extracted) (count_over_time({service=~"$service", ${L}="error"} | json | service_extracted=~"$component" [$__range])))`,
           '',
         ),
       )
@@ -311,7 +315,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .gridPos({ h: 6, w: 6, x: 18, y: 8 })
       .withTarget(
         lokiQuery(
-          'sum by (service_extracted) (count_over_time({service=~"$service", level=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__auto]))',
+          `sum by (service_extracted) (count_over_time({service=~"$service", ${L}=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search" [$__auto]))`,
           '{{service_extracted}}',
         ),
       )
@@ -341,7 +345,7 @@ const dashboard = new DashboardBuilder('OpenCloud Logs')
       .datasource(LOKI_DS)
       .gridPos({ h: 12, w: 24, x: 0, y: 15 })
       .withTarget(
-        lokiQuery('{service=~"$service", level=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search"'),
+        lokiQuery(`{service=~"$service", ${L}=~"$level"} | json | service_extracted=~"$component" |~ "(?i)$search"`),
       )
       .dedupStrategy(LogsDedupStrategy.None)
       .enableLogDetails(true)

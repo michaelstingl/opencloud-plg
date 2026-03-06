@@ -7,6 +7,16 @@ import {
   type DynamicConfigValue,
 } from '@grafana/grafana-foundation-sdk/dashboard';
 
+// ── Log backend config ──────────────────────────────────────────────
+// Default: otlp (OTel Collector → Loki OTLP endpoint)
+// Override: LOG_BACKEND=alloy for legacy Alloy native pipeline
+// Affects label names used in LogQL stream selectors.
+
+export const LOG_BACKEND = process.env.LOG_BACKEND ?? 'otlp';
+
+export const LOG_LEVEL_LABEL = LOG_BACKEND === 'otlp' ? 'detected_level' : 'level';
+export const LOG_CONTAINER_LABEL = LOG_BACKEND === 'otlp' ? 'service_name' : 'container';
+
 // ── Datasources ──────────────────────────────────────────────────────
 
 export const PROMETHEUS_DS: DataSourceRef = { type: 'prometheus', uid: 'prometheus' };

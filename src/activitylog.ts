@@ -24,6 +24,8 @@ import {
 } from '@grafana/grafana-foundation-sdk/common';
 import {
   LOKI_DS,
+  LOG_BACKEND,
+  LOG_CONTAINER_LABEL,
   lokiQuery,
   greenRed,
   greenYellow,
@@ -32,6 +34,10 @@ import {
   colorOverride,
   resetRefId,
 } from './shared.js';
+
+// Stream selector label: alloy → container="opencloud-opencloud-1", otlp → service_name="opencloud"
+const C = LOG_CONTAINER_LABEL;
+const CV = LOG_BACKEND === 'otlp' ? 'opencloud' : 'opencloud-opencloud-1';
 
 // ── Stat panel factory ───────────────────────────────────────────────
 
@@ -106,7 +112,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(110, 'NATS Errors (24h)',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `"service":"nats"` | json | level=`error` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`"service":"nats"\` | json | level=\`error\` [24h]))`,
       greenRed(1),
       { h: 4, w: 6, x: 0, y: 1 },
     ),
@@ -114,7 +120,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(120, 'NATS Warnings (24h)',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `"service":"nats"` | json | level=`warn` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`"service":"nats"\` | json | level=\`warn\` [24h]))`,
       greenYellowOrange(1, 10),
       { h: 4, w: 6, x: 6, y: 1 },
     ),
@@ -122,7 +128,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(130, 'NATS Config Warnings (24h)',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `nats configuration` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`nats configuration\` [24h]))`,
       greenYellow(1),
       { h: 4, w: 6, x: 12, y: 1 },
     ),
@@ -130,7 +136,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(140, 'Filestore Warnings (24h)',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `"service":"nats"` |= `Filestore` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`"service":"nats"\` |= \`Filestore\` [24h]))`,
       greenYellow(1),
       { h: 4, w: 6, x: 18, y: 1 },
     ),
@@ -138,7 +144,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     logsPanel(150, 'NATS Service Logs',
-      '{container="opencloud-opencloud-1"} |= `"service":"nats"` | json | level=~`error|warn`',
+      `{${C}="${CV}"} |= \`"service":"nats"\` | json | level=~\`error|warn\``,
       { h: 8, w: 24, x: 0, y: 5 },
     ),
   )
@@ -152,7 +158,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(210, 'Activitylog Errors (Last 24h)',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `"service":"activitylog"` |= `error` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`"service":"activitylog"\` |= \`error\` [24h]))`,
       greenYellowRed(1, 10),
       { h: 4, w: 6, x: 0, y: 14 },
     ),
@@ -160,7 +166,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(220, 'Event Processing Errors',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `"service":"activitylog"` |= `could not process event` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`"service":"activitylog"\` |= \`could not process event\` [24h]))`,
       greenRed(1),
       { h: 4, w: 6, x: 6, y: 14 },
     ),
@@ -168,7 +174,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(230, 'Store Errors',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `"service":"activitylog"` |~ `error.*(store|activities)` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`"service":"activitylog"\` |~ \`error.*(store|activities)\` [24h]))`,
       greenRed(1),
       { h: 4, w: 6, x: 12, y: 14 },
     ),
@@ -176,7 +182,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     statPanel(240, 'Unknown Events',
-      'sum(count_over_time({container="opencloud-opencloud-1"} |= `"service":"activitylog"` |= `event not registered` [24h]))',
+      `sum(count_over_time({${C}="${CV}"} |= \`"service":"activitylog"\` |= \`event not registered\` [24h]))`,
       greenYellow(1),
       { h: 4, w: 6, x: 18, y: 14 },
     ),
@@ -191,7 +197,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
       .gridPos({ h: 6, w: 24, x: 0, y: 18 })
       .withTarget(
         lokiQuery(
-          'sum by (level) (count_over_time({container="opencloud-opencloud-1"} |= `"service":"activitylog"` | json | level=~`error|warn` [$__interval]))',
+          `sum by (level) (count_over_time({${C}="${CV}"} |= \`"service":"activitylog"\` | json | level=~\`error|warn\` [$__interval]))`,
           '{{level}}',
         ),
       )
@@ -211,7 +217,7 @@ const dashboard = new DashboardBuilder('OpenCloud Activitylog Debug')
 
   .withPanel(
     logsPanel(260, 'All Activitylog Errors',
-      '{container="opencloud-opencloud-1"} |= `"service":"activitylog"` | json | level=~`error|warn`',
+      `{${C}="${CV}"} |= \`"service":"activitylog"\` | json | level=~\`error|warn\``,
       { h: 8, w: 24, x: 0, y: 24 },
     ),
   );
